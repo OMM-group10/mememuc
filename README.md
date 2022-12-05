@@ -74,7 +74,7 @@ npm start # Starts the backend project using the non-persistent in-memory MongoD
 ```
 
 ### Initale Commits
-Franzi
+Franzi - (auch mit SSH Key)
 
 Test Vivien
 
