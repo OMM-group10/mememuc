@@ -83,4 +83,4 @@ npm start # Starts the backend project using the non-persistent in-memory MongoD
 
 | Name             | Franzi                 | Vivi | Bogdan                 | Jakob |
 | ---------------- | ---------------------- | ---- | ---------------------- | ----- |
-| Everything works |(auch mit SSH Key) :white_check_mark: | :white_check_mark: | (auch mit SSH Key) :white_check_mark:  | :white_check_mark:  |
+| Everything works |(auch mit SSH Key) :white_check_mark: | (auch mit SSH key) :white_check_mark: | (auch mit SSH Key) :white_check_mark:  | :white_check_mark:  |
