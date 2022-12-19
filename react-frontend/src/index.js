@@ -15,9 +15,9 @@ root.render(
 const editor = ReactDOM.createRoot(document.getElementById('editor'));
 editor.render(
   <React.StrictMode>
-    <App />
+    <Editor />
   </React.StrictMode>
-  );
+);
 
 
 
