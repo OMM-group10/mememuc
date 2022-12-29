@@ -1,42 +1,32 @@
 import { Link } from "react-router-dom";
+import './navbar.css'
 
 
 function Home(){
   return (
-      <div className="Home">
+    <div className="Home">
         <ul>
         <li>
-          <Link to="/">Home</Link>
+          <Link to="/">Home </Link>
         </li>
         <li>
-          <Link to="/editor">Editor</Link>
+          <Link to="/editor">Editor </Link>
         </li>
         <li>
-          <Link to="/account">Account</Link>
+          <Link to="/account">Account </Link>
         </li>
         <li>
-          <Link to="/overview">Overview</Link>
+          <Link to="/overview">Overview </Link>
         </li>
         <li>
           <Link to="/documentation">Documentation</Link>
         </li>
       </ul>
-    <header className="App-header">
-    <h1>Home Page</h1>
-        <p>
-         Hello Home!
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div>
+        <h1>Home Page!</h1>
+      </div>
     </div>
+    
   );
 };
 
