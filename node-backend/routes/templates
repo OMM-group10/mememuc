@@ -1,0 +1,36 @@
+var express = require('express');
+var router = express.Router();
+
+
+
+/* GET users listing. */
+router.get('/', function(req, res, next) {
+  const db = req.db;
+  
+  // get collections from db
+  const templates = db.get('Templates');
+
+  templates.findOne({name: req.query.template}) // return all user properties, except the basic auth token
+      .then((template) => res.json(template))
+      .catch((e) => res.status(500).send())
+});
+
+router.get('/memes', function(req, res, next) {
+    const db = req.db;
+    
+    // get collections from db
+    const templates = db.get('Templates');
+    const memes = db.get("Memes");
+  
+    templates.findOne({name: req.query.template}) // return all user properties, except the basic auth token
+        .then((template) => {
+            memes.find({template: template._id})
+            .then(memeList=>{
+                res.json(memeList);
+            })
+        })
+        .catch((e) => res.status(500).send())
+  });
+  
+
+module.exports = router;
