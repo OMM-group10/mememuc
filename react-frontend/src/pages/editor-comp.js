@@ -22,17 +22,9 @@ export default class EditorComponent extends Component {
     setTemplate = (inputtemplate) => {this.setState({templateId: (this.state.templateId = inputtemplate)})}
     setUser = (inputuser) => {this.setState({user: (this.state.user = inputuser)})}
 
-    
-    inc = () => { this.setState({count: (this.state.count + 1)}) }
-    dec = () => { this.setState({count: (this.state.count - 1)}) }
+
     render() {
         return (
-            <div className="counter">
-                <span className="counter-state">{ this.state.count }</span>
-                <div className="buttons">
-                    <button onClick={this.inc}>+</button>
-                    <button onClick={this.dec}>-</button>
-                </div>
-            </div>
+            //Frontend in JSX :)
         )
     }
