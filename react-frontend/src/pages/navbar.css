@@ -1,0 +1,19 @@
+ul {
+    list-style-type: none;
+    margin: 20;
+  }
+
+li {
+    display: inline;
+    border-right: 1px solid gray;
+  }
+
+.link{
+    color: white;
+    text-decoration: none;
+    padding: 8px;
+}
+
+.link:hover{
+    color: gray;
+}
