@@ -5,7 +5,7 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
 
   //get collections from db
-  let memes = req.db.get("Meme");
+  let memes = req.db.get("Memes");
   let users = req.db.get("Users");
   let comments = req.db.get("Comments");
 
@@ -33,7 +33,8 @@ router.get('/', function(req, res, next) {
             })
         })
     })
-
+    //TODO: add error handling
+    //TODO: Clean up layout
 
 
   
