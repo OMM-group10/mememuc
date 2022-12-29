@@ -5,28 +5,29 @@ import './navbar.css'
 function Home(){
   return (
     <div className="Home">
-        <ul>
+      <ul>
         <li>
-          <Link to="/">Home </Link>
+          <Link to="/" className="link">Home </Link>
         </li>
         <li>
-          <Link to="/editor">Editor </Link>
+          <Link to="/editor" className="link">Editor </Link>
         </li>
         <li>
-          <Link to="/account">Account </Link>
+          <Link to="/account" className="link">Account </Link>
         </li>
         <li>
-          <Link to="/overview">Overview </Link>
+          <Link to="/overview" className="link">Overview </Link>
         </li>
         <li>
-          <Link to="/documentation">Documentation</Link>
+          <Link to="/documentation" className="link">Documentation</Link>
         </li>
       </ul>
-      <div>
-        <h1>Home Page!</h1>
-      </div>
+    <header className="App-header">
+        <p>
+         Hello Home!
+        </p>
+      </header>
     </div>
-    
   );
 };
 

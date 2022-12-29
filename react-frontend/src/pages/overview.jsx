@@ -1,23 +1,24 @@
 import { Link } from "react-router-dom";
+import './navbar.css';
 
 function Overview() {
     return (
       <div className="Overview">
         <ul>
         <li>
-          <Link to="/">Home</Link>
+          <Link to="/" className="link">Home </Link>
         </li>
         <li>
-          <Link to="/editor">Editor</Link>
+          <Link to="/editor" className="link">Editor </Link>
         </li>
         <li>
-          <Link to="/account">Account</Link>
+          <Link to="/account" className="link">Account </Link>
         </li>
         <li>
-          <Link to="/overview">Overview</Link>
+          <Link to="/overview" className="link">Overview </Link>
         </li>
         <li>
-          <Link to="/documentation">Documentation</Link>
+          <Link to="/documentation" className="link">Documentation</Link>
         </li>
       </ul>
       <header className="App-header">
