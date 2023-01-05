@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
+import { TextField } from "@mui/material";
 import './navbar.css';
+import 'src/Futurama_Meme';
 
 function Editor() {
   return (
@@ -21,11 +23,13 @@ function Editor() {
           <Link to="/documentation" className="link">Documentation</Link>
         </li>
       </ul>
-    <header className="App-header">
-        <p>
-         Hello Editor!
-        </p>
+      <header className="App-header">
+        <img src="Futurama_Meme"></img>
+        <p> Hello Editor!</p> 
+        <input type="text"></input>
+        <input type="text"></input>
       </header>
+      
     </div>
   );
 }
