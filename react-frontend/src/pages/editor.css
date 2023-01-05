@@ -8,6 +8,22 @@
     width: 50%;
 }
 
+.Canvas img {
+    display: block;
+}
+
+.Caption1 {
+    position: absolute;
+    margin-top: -350px;
+    margin-left: 100px;
+}
+
+.Caption2 {
+    position: absolute;
+    margin-top: -100px;
+    margin-left: 100px;
+}
+
 .Params{
     float: left;
     width: 25%;
