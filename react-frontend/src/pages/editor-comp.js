@@ -22,6 +22,8 @@ export default class EditorComponent extends Component {
     setTemplate = (inputtemplate) => {this.setState({templateId: (this.state.templateId = inputtemplate)})}
     setUser = (inputuser) => {this.setState({user: (this.state.user = inputuser)})}
 
+    // TODO: weiter Funktionen überlegen z.B. ChangeCaption/DeleteCaption und an Verbindung zum BackEnd feilen
+
 
     render() {
         return (
