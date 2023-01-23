@@ -5,37 +5,89 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import './navbar.css';
 
 
+
 class Overview extends React.Component{
 
+  //Url to get memes
+  baseUrl = new URL("http://localhost:3001/memes/list");
+  PAGESIZE = 10;
+  initialLoad = 0;
 
   constructor(props) {
     super(props);
 
-    //TODO: initialize state with first batch of memes
     this.state = {
-      items: Array.from({ length: 10 }),
-      hasMore: true
+      items: [],
+      hasMore: true,
+
+      options: {
+        sort: {creationDate: 1},
+        page: 0
+      }
     };
-  ;
+
   }
 
-  
-  //TODO: implement
-  fetchMoreData = () => {
-    if (this.state.items.length >= 500) {
-      this.setState({ hasMore: false });
-      return;
+/*   componentDidMount(){
+    console.log("Did Mount!")
+    console.log(this.state);
+    //load first batch/page
+    if (this.state.items.length == 0) this.fetchMoreData();
+
     }
-    // a fake async api call like which sends
-    // 20 more records in .5 secs
-    setTimeout(() => {
-      this.setState({
-        items: this.state.items.concat(Array.from({ length: 10 }))
-      });
-    }, 500);
+ */
+
+
+  
+  fetchMoreData = () => {
+
+    console.log("Loading more Memes");
+
+    //log state for debugging
+    console.log("State:", this.state);
+
+    //send options object stringified
+    this.baseUrl.search = new URLSearchParams({options: JSON.stringify(this.state.options)}).toString();
+    console.log(this.baseUrl);
+
+    //send GET request for next page of memes
+    //TODO: Error handling
+    fetch(this.baseUrl)
+      .then(res => res.json())
+      .then(docs => {
+
+        //update memes array
+        this.setState({
+          items: this.state.items.concat(docs)
+        });
+
+
+        //if less than 10 returned from server -> last page
+        if(docs.length < 10){
+          this.setState({ hasMore: false });
+          };
+
+        //increment page number
+        this.setState(state =>{
+          let options = Object.assign({}, state.options);
+          options.page = options.page +1;
+          return { options };
+        } )
+    
+        //console.log("single meme", docs[2])
+        console.log("Array", docs)});
+
+
   };
 
 render() {
+
+  //componentDidMount didn't work so this is a workaround
+  if (!this.initialLoad){
+    this.fetchMoreData();
+    this.initialLoad = 1;
+  }
+
     return (
       <div className="Overview">
         <ul>
@@ -76,10 +128,11 @@ render() {
             {this.state.items.map((i, index) => (
 
               //Meme elements
-              <div class="Overview-meme" key={index}>
+              //TODO: Add rating and link to single view page
+              <div className="Overview-meme" key={i._id}>
                  <img src="./images/doge.jpg" alt="Doge" width="500" height="500"/> 
                  <br/>
-                Meme - #{index}
+                {i.title} - #{index}
               </div>
             ))}
           </InfiniteScroll>
