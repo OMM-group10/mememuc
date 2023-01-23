@@ -130,7 +130,7 @@ render() {
               //Meme elements
               //TODO: Add rating and link to single view page
               <div className="Overview-meme" key={i._id}>
-                 <img src="./images/doge.jpg" alt="Doge" width="500" height="500"/> 
+                 <img src="http://localhost:3001/images/templates/Doge.jpg" alt="Doge" width="500" height="500"/> 
                  <br/>
                 {i.title} - #{index}
               </div>
