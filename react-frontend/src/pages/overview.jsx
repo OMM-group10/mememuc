@@ -63,7 +63,7 @@ class Overview extends React.Component{
 
 
         //if less than 10 returned from server -> last page
-        if(docs.length < 10){
+        if(docs.length < this.PAGESIZE){
           this.setState({ hasMore: false });
           };
 
@@ -82,7 +82,7 @@ class Overview extends React.Component{
 
 render() {
 
-  //componentDidMount didn't work so this is a workaround
+  //componentDidMount() didn't work so this is a workaround
   if (!this.initialLoad){
     this.fetchMoreData();
     this.initialLoad = 1;
@@ -125,14 +125,16 @@ render() {
             }
           >
             
-            {this.state.items.map((i, index) => (
+            {this.state.items.map((meme, index) => (
 
               //Meme elements
               //TODO: Add rating and link to single view page
-              <div className="Overview-meme" key={i._id}>
-                 <img src="http://localhost:3001/images/templates/Doge.jpg" alt="Doge" width="500" height="500"/> 
+              <div className="Overview-meme" key={meme._id}>
+                <Link to={"/meme/" + meme._id}>
+                <img src={meme.image} alt="Meme" width="600"/>
+                </Link>
                  <br/>
-                {i.title} - #{index}
+                {meme.title} - #{index}
               </div>
             ))}
           </InfiniteScroll>
