@@ -4,6 +4,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+var cnv = require('canvas');
+var renderer = require('./renderer');
+
+
 // ##### IMPORTANT
 // ### Your backend project has to switch the MongoDB port like this
 // ### Thus copy paste this block to your project
@@ -20,6 +24,10 @@ var templatesRouter = require('./routes/templates');
 
 var app = express();
 
+
+//Load fonts
+renderer.loadFonts();
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -29,7 +37,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use(function(req,res,next){  req.db = db;
+//TODO: add cnv
+app.use(function(req,res,next){ 
+  req.db = db;
   next();
 });
 
