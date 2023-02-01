@@ -16,7 +16,8 @@ import './navbar.css';
                       } 
  */
   function createMeme(memeObject){
-
+    
+    //TODO: Change Back URL
     fetch("http://localhost:3001/memes/create", {
       method: "post",
       headers: {
@@ -47,7 +48,7 @@ import './navbar.css';
   //returns random meme object
   function randomMeme(){
   
-    let templates = ["63cd323abe14fa6cc82dd828", "63ad7ad8b217ecc90763ce54", "63ace64e4ebb5fef51bc854e"]
+    let templates = ["Spongebob", "Boromir", "Doge"]
   
     let memeObject = {captions: []};
   
@@ -59,39 +60,66 @@ import './navbar.css';
     memeObject.template = templates[Math.floor(Math.random()*100)%3];
   
     //captions
+    //TODO: Change to camelCase
     memeObject.captions[0] = {
-      "x_position": Math.random(),
-      "y_position": Math.random(),
+      "xPosition": Math.random(),
+      "yPosition": Math.random(),
       "text": makeid(Math.floor(Math.random()*10)),
-      "font_size": (Math.floor(Math.random()*10)+5),
-      color: "black"
+      "fontSize": (Math.floor(Math.random()*200)+100),
+      color: "white"
     };
   
     memeObject.captions[1] = {
-      "x_position": Math.random(),
-      "y_position": Math.random(),
+      "xPosition": Math.random(),
+      "yPosition": Math.random(),
       "text": makeid(Math.floor(Math.random()*10)),
-      "font_size": (Math.floor(Math.random()*10)+5),
+      "fontSize": (Math.floor(Math.random()*200)+100),
       color: "white"
-  
     };
   
     return memeObject;
   
   }
                       
-     //Populates db with random meme content
-    //console.log("Random meme test", randomMeme());
-    //createMeme(randomMeme());
-/*     for (let i = 0; i < 10; i++) {
-      createMeme(randomMeme());
 
+  //creates 5 random memes
+  function populateDb(){
+    for (let i = 0; i < 5; i++) {
+      createMeme(randomMeme());
     }
- */ 
-                     
+    
+  }
+
+  //just to test stuff
+/*   createMeme({
+    title: "test",
+    user: "testuser2",
+    template: "Spongebob",
+    captions: [{
+    "xPosition": 0.5,
+    "yPosition": 0.5,
+    "text": "ASDF",
+    "fontSize": 200,
+    "color": "white"},
+    {
+      "xPosition": 0.5,
+      "yPosition": 0.8,
+      "text": "ASDF ghjk",
+      "fontSize": 200,
+      "color": "white"},
+    {
+      "xPosition": 0.3,
+      "yPosition": 0.2,
+      "text": "ASDF 3",
+      "fontSize": 200,
+      "color": "white"}]
+  });
+ */
+
 
 
 function Documentation() {
+
     return (
       <div className="Documentation">
         <ul>
@@ -115,6 +143,9 @@ function Documentation() {
           <p>
            Hello Documentation!
           </p>
+          <button onClick={populateDb}>
+        "Click to fill DB with random memes"
+          </button>
         </header>
       </div>
     );
