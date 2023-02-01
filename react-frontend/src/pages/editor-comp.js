@@ -21,12 +21,21 @@ export default class EditorComponent extends Component {
     
     setTemplate = (inputtemplate) => {this.setState({templateId: (this.state.templateId = inputtemplate)})}
     setUser = (inputuser) => {this.setState({user: (this.state.user = inputuser)})}
+    }
 
     // TODO: weiter Funktionen überlegen z.B. ChangeCaption/DeleteCaption und an Verbindung zum BackEnd feilen
+    /*
+    * Überlegungen zur Verbindung zum BackEnd:
+    * In JavaScript gibt es die fetch-API, welche es asynchron ermöglicht, Daten von API-Endpunkten abzufragen
+    * In der Variante aus der Übung nutzen sie ebenfalls fetch um Daten vom Frontend zum Backend zu bekommen
+    * Bräuchte dann nur einen entsprechenden Pfad zur API um fetch(Pfad).then( result => how to process the result)
+    * aufrufen zu können
+    * Folgendes Beispiel (https://jasonwatmore.com/post/2020/02/01/react-fetch-http-post-request-examples) macht deutlich,
+    * dass wir mit fetch auch einen POST-Request an die API senden können und somit aus dem Frontend ans Backend Daten
+    * übertragen können
+    * 
+    */
+
+    //TODO: meine State-Benennungen an Jakob seine anpassen
 
 
-    render() {
-        return (
-            //Frontend in JSX :)
-        )
-    }
