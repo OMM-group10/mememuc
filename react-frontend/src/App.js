@@ -5,6 +5,7 @@ import Editor from './pages/editor';
 import Account from './pages/account';
 import Overview from './pages/overview';
 import Documentation from './pages/documentation';
+import Meme from './pages/meme';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 
@@ -18,7 +19,8 @@ function App() {
           <Route path='/editor' element={<Editor />} />            
           <Route path='/account' element={<Account />} /> 
           <Route path='/overview' element={<Overview />} /> 
-          <Route path='/documentation' element={<Documentation />} />    
+          <Route path='/documentation' element={<Documentation />} />
+          <Route path='/meme/:memeId' element={<Meme />} />
         </Routes>
       </Router>
       </header>
