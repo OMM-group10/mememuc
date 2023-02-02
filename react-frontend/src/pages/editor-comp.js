@@ -12,16 +12,19 @@
 
 import React, {Component} from 'react'
 // import './omm-counter.css'
-export default class EditorComponent extends Component {
-    state = { templateId: -1, user:"", captions:[] }
 
-    addCaption = (inputtext, inputX, inputY, inputcol, inputsize) => 
+function EditorComponent() {
+    const state = { templateId: -1, user:"", captions:[] }
+
+    const addCaption = (inputtext, inputX, inputY, inputcol, inputsize) => 
         {this.setState({captions: (this.state.captions.push(
             {text:inputtext, posX:inputX, posY:inputY, col:inputcol, size:inputsize}))})}
     
-    setTemplate = (inputtemplate) => {this.setState({templateId: (this.state.templateId = inputtemplate)})}
-    setUser = (inputuser) => {this.setState({user: (this.state.user = inputuser)})}
+    const setTemplate = (inputtemplate) => {this.setState({templateId: (this.state.templateId = inputtemplate)})}
+    const setUser = (inputuser) => {this.setState({user: (this.state.user = inputuser)})}
     }
+
+    export default EditorComponent;
 
     // TODO: weiter Funktionen überlegen z.B. ChangeCaption/DeleteCaption und an Verbindung zum BackEnd feilen
     /*
