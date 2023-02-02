@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 
 var cnv = require('canvas');
 var renderer = require('./renderer');
@@ -23,7 +24,7 @@ var templatesRouter = require('./routes/templates');
 
 
 var app = express();
-
+app.use(cors());
 
 //Load fonts
 renderer.loadFonts();
