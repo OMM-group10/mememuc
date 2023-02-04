@@ -45,25 +45,44 @@ app.use(function(req,res,next){
 });
 
 
-// the login middleware. Requires BasicAuth authentication
-app.use((req,res,next) => {
-  const users = db.get('users');
-  users.findOne({basicauthtoken: req.headers.authorization}).then(user => {
-    if (user) {
-      req.username = user.username;  // test test => Basic dGVzdDp0ZXN0
-      next()
-    }
-    else {
-      console.log("not logged in");
-      next();
 
-      /* res.set('WWW-Authenticate', 'Basic realm="401"')
-      res.status(401).send() */
-    }
-  }).catch(e => {
-    console.error(e)
+// adapted from the code given to us in exercise 4 on authentication and databases
+// the login route. Itself requires BasicAuth authentication. When successful, a JWT token is generated
+app.use('/login', (req,res,next) => {
+  console.log(req.headers.authorization)
+  if (req.headers.authorization !== 'Basic c3R1ZGVudDpvbW1pc2F3ZXNvbWU=') { // student ommisawesome
     res.set('WWW-Authenticate', 'Basic realm="401"')
     res.status(401).send()
+    return
+  }
+  else {
+    const jwt = require('njwt')
+    const claims = {username: 'student'}
+    const token = jwt.create(claims, 'our-server-seceret')
+    token.setExpiration(new Date().getTime() + 60 * 1000)
+    const jwtTokenSting = token.compact()
+    res.send(jwtTokenSting)
+  }
+})
+
+// the middleware being called before all other endpoints (except "/login", because "/login" is registered before this one
+app.use((req,res,next) => {
+  // Check if token is passed as url parameter
+  if (!req.query.token){
+    res.status(401).send("query parameter token is not provided")
+    return;
+  }
+  // check if the provided token is valid
+  const jwt = require('njwt')
+  const { token } = req.query;
+  jwt.verify(token, 'our-server-seceret', (err, verifiedJwt) => {
+    if(err){
+      res.status(401).send(err.message)
+    }else{
+      // if verification successful, continue with next middlewares
+      console.log(verifiedJwt)
+      next()
+    }
   })
 })
 
