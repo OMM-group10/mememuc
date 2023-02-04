@@ -36,24 +36,7 @@ function Meme() {
   if(!memeObject) return <div>Loading...</div>;
 
     return (
-      <div className="Meme">
-        <ul>
-        <li>
-          <Link to="/" className="link">Home </Link>
-        </li>
-        <li>
-          <Link to="/editor" className="link">Editor </Link>
-        </li>
-        <li>
-          <Link to="/account" className="link">Account </Link>
-        </li>
-        <li>
-          <Link to="/overview" className="link">Overview </Link>
-        </li>
-        <li>
-          <Link to="/documentation" className="link">Documentation</Link>
-        </li>
-      </ul>
+      <>
       <header className="App-header">
           <p>
            Hello Singleview! <br/>
@@ -63,7 +46,7 @@ function Meme() {
           </p>
         </header>
         <img src={memeObject.image} alt="Meme" width="800"/>
-      </div>
+        </>
     );
   }
   
