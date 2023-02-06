@@ -1,5 +1,5 @@
 import { useState} from "react";
-import { TextField } from "@mui/material";
+import { TextField, Button } from "@mui/material";
 import handleLogin from './loginHandler';
 import './navbar.css';
 
@@ -7,7 +7,7 @@ import './navbar.css';
 
 
 function Account() {
-    const [userData, setUserData] = useState({firstname:"", name: "anonymous", age: 18});
+    const [userData, setUserData] = useState({name: "anonymous"});
     const [username, setUsername] = useState({username:""});
     const [password, setPassword] = useState({password:""});
 
@@ -27,6 +27,7 @@ function Account() {
             id="usernameInput"
             label="Username"
             defaultValue=""
+            margin="normal"
             onChange={(user) => {
               setUsername(user.target.value);
             }} />
@@ -36,11 +37,12 @@ function Account() {
             id="passwordInput"
             label="Password"
             defaultValue=""
+            margin="normal"
             onChange={(pass) => {
               setPassword(pass.target.value);
             }} />
           </form>
-          <button onClick={loginUser}>Sign In!</button>
+          <Button variant="contained" margin="normal" onClick={loginUser}>Sign In!</Button>
         </header>
     );
   }

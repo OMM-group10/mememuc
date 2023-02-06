@@ -18,9 +18,10 @@ function handleLogin (username, password) {
     let loginPayload = {
       user: username,
       pass: password
-    }
+    };
+    console.log(JSON.stringify(loginPayload));
   
-    fetch("http://localhosrt:3001/login", {
+    fetch("http://localhost:3001/login", {
         method:"post",
         headers: {
             'Accept': 'application/json',
@@ -29,9 +30,10 @@ function handleLogin (username, password) {
 
         body: JSON.stringify(loginPayload)
     })
+    .then(response => console.log(response))
     .then(response => response.json())
     .then(storeToken)
     .catch(err => console.error("In function handleLogin this error occured:", err))
   };
-
+  //TODO: catch error that occurs here, seems to have a problem with the answer of the API
 export default handleLogin;
