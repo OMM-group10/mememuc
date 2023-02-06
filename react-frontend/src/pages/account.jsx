@@ -1,24 +1,8 @@
 import { useState} from "react";
 import { TextField } from "@mui/material";
-import {handleLogin} from "./login_handler";
+import handleLogin from './loginHandler';
 import './navbar.css';
 
-
-function SimpleUIElement(){
-  const [dataFromSignInFormular, setDataFromFormular] = useState({firstname:"", name:""});
-  return(
-    <div className="LoginFormula">
-      <p>This is not you? Sign in here:</p>
-      <label for="fname">First name:</label>
-      <input type="text" id="fname" name="fname"></input> <br></br>
-      <label for="lname">Last name:</label>
-      <input type="text" id="lname" name="lname"></input> <br></br>
-      <button onClick={loginUser("ben", "affleck")}>Sign In!</button>
-    </div>
-
-    
-  );
-}
 
 function loginUser(propfirstname, propname){
   console.log("Button got clicked! User's name:", propfirstname, propname);
@@ -27,23 +11,33 @@ function loginUser(propfirstname, propname){
 function Account() {
     const [userData, setUserData] = useState({firstname:"", name: "anonymous", age: 18});
     const [username, setUsername] =useState({username:""});
+    const [password, setPassword] =useState({password:""});
 
     return (
       <header className="App-header">
           <p>
            Hello {userData.name}!
           </p>
-          <SimpleUIElement/>
+          <p>This is not you? Sign in here:</p>
           <form>
           <TextField 
             id="usernameInput"
             label="Username"
-            variant="outlined"
-            value={username}
-            onChange={(top) => {
-              setUsername(top.target.value);
+            defaultValue=""
+            onChange={(user) => {
+              setUsername(user.target.value);
             }} />
           </form>
+          <form>
+          <TextField 
+            id="passwordInput"
+            label="Password"
+            defaultValue=""
+            onChange={(pass) => {
+              setPassword(pass.target.value);
+            }} />
+          </form>
+          <button onClick={handleLogin}>Sign In!</button>
         </header>
     );
   }
