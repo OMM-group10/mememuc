@@ -4,14 +4,17 @@ import handleLogin from './loginHandler';
 import './navbar.css';
 
 
-function loginUser(propfirstname, propname){
-  console.log("Button got clicked! User's name:", propfirstname, propname);
-}
+
 
 function Account() {
     const [userData, setUserData] = useState({firstname:"", name: "anonymous", age: 18});
-    const [username, setUsername] =useState({username:""});
-    const [password, setPassword] =useState({password:""});
+    const [username, setUsername] = useState({username:""});
+    const [password, setPassword] = useState({password:""});
+
+    const loginUser = () => {
+      console.log("Button got clicked! User's name:", username);
+      handleLogin(username, password);
+    }
 
     return (
       <header className="App-header">
@@ -37,7 +40,7 @@ function Account() {
               setPassword(pass.target.value);
             }} />
           </form>
-          <button onClick={handleLogin}>Sign In!</button>
+          <button onClick={loginUser}>Sign In!</button>
         </header>
     );
   }
