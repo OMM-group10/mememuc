@@ -47,25 +47,33 @@ app.use(function(req,res,next){
 
 
 // adapted from the code given to us in exercise 4 on authentication and databases
-// the login route. Itself requires BasicAuth authentication. When successful, a JWT token is generated
+// React-Frontend sends POST-Request for Authentication
+// TODO: implement password-chech, maybe by using a hash?
 app.use('/login', (req,res,next) => {
-  console.log(req.headers.authorization)
-  if (req.headers.authorization !== 'Basic c3R1ZGVudDpvbW1pc2F3ZXNvbWU=') { // student ommisawesome
+  console.log(req.body.user, req.body.pass);
+  if(!req.body.user || !req.body.pass){
     res.set('WWW-Authenticate', 'Basic realm="401"')
     res.status(401).send()
     return
-  }
-  else {
-    const jwt = require('njwt')
-    const claims = {username: 'student'}
-    const token = jwt.create(claims, 'our-server-seceret')
-    token.setExpiration(new Date().getTime() + 60 * 1000)
-    const jwtTokenSting = token.compact()
-    res.send(jwtTokenSting)
+  }else{
+    const users = db.get('users');
+    const matchedUser = users.findOne({username: req.body.user},{});
+    if(!matchedUser){
+      res.set('WWW-Authenticate', 'Basic realm="401"')
+      res.status(401).send()
+      return
+    }else{
+      const jwt = require('njwt')
+      const claims = {username: matchedUser.username}
+      const token = jwt.create(claims, 'our-server-seceret')
+      token.setExpiration(new Date().getTime() + 60 * 1000)
+      const jwtTokenSting = token.compact()
+      res.send(jwtTokenSting)
+    }
   }
 })
 
-// the middleware being called before all other endpoints (except "/login", because "/login" is registered before this one
+// the middleware being called before all other endpoints (except "/login", because "/login" is registered before this one)
 app.use((req,res,next) => {
   // Check if token is passed as url parameter
   if (!req.query.token){
