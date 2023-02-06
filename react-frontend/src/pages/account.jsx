@@ -34,14 +34,16 @@ function Account() {
            Hello {userData.name}!
           </p>
           <SimpleUIElement/>
+          <form>
           <TextField 
             id="usernameInput"
             label="Username"
             variant="outlined"
             value={username}
             onChange={(top) => {
-              setCaption1(top.target.value);
+              setUsername(top.target.value);
             }} />
+          </form>
         </header>
     );
   }
