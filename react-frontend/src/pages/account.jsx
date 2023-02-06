@@ -15,6 +15,7 @@ function SimpleUIElement(){
       <input type="text" id="lname" name="lname"></input> <br></br>
       <button onClick={loginUser("ben", "affleck")}>Sign In!</button>
     </div>
+
     
   );
 }
@@ -25,6 +26,7 @@ function loginUser(propfirstname, propname){
 
 function Account() {
     const [userData, setUserData] = useState({firstname:"", name: "anonymous", age: 18});
+    const [username, setUsername] =useState({username:""});
 
     return (
       <header className="App-header">
@@ -32,6 +34,14 @@ function Account() {
            Hello {userData.name}!
           </p>
           <SimpleUIElement/>
+          <TextField 
+            id="usernameInput"
+            label="Username"
+            variant="outlined"
+            value={username}
+            onChange={(top) => {
+              setCaption1(top.target.value);
+            }} />
         </header>
     );
   }
