@@ -3,14 +3,16 @@ import { Link } from "react-router-dom";
 import { render } from "react-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
 import './navbar.css';
+import Filter from "../components/filter";
+import SortSelector from "../components/sortSelector";
 
 
 
 class Overview extends React.Component{
 
   //Url to get memes
-  baseUrl = new URL("http://localhost:3001/memes/list");
-  PAGESIZE = 10;
+  baseUrl = new URL("http://localhost:3001/memes/page");
+  //PAGESIZE = 10;
   initialLoad = 0;
 
   constructor(props) {
@@ -19,11 +21,10 @@ class Overview extends React.Component{
     this.state = {
       items: [],
       hasMore: true,
+      
+      pageSize: 10,
+      page: 0,    
 
-      options: {
-        sort: {creationDate: 1},
-        page: 0
-      }
     };
 
   }
@@ -38,17 +39,27 @@ class Overview extends React.Component{
  */
 
 
+  reloadMemes = () => {
+    this.initialLoad = 0;
+    this.setState({items:[], page: 0, hasMore:true})
+   }
   
   fetchMoreData = () => {
 
     console.log("Loading more Memes");
 
     //log state for debugging
-    console.log("State:", this.state);
 
-    //send options object stringified
-    this.baseUrl.search = new URLSearchParams({options: JSON.stringify(this.state.options)}).toString();
-    console.log(this.baseUrl);
+    //create params object to send in request
+    let paramObject = {
+      paging: {page: this.state.page, pageSize: this.state.pageSize},
+      sortBy: this.props.sortBy,
+      filter: this.props.filterState
+    }
+
+    //send params object stringified
+    this.baseUrl.search = new URLSearchParams({params: JSON.stringify(paramObject)}).toString();
+    //console.log(this.baseUrl);
 
     //send GET request for next page of memes
     //TODO: Error handling
@@ -62,23 +73,23 @@ class Overview extends React.Component{
         });
 
 
-        //if less than 10 returned from server -> last page
-        if(docs.length < this.PAGESIZE){
+        //if less than pageSize returned from server -> last page
+        if(docs.length < this.state.pageSize){
           this.setState({ hasMore: false });
           };
 
         //increment page number
-        this.setState(state =>{
-          let options = Object.assign({}, state.options);
-          options.page = options.page +1;
-          return { options };
-        } )
+        this.setState(prev =>{
+          return{...prev, page:(prev.page+1)}
+        })
     
         //console.log("single meme", docs[2])
-        console.log("Array", docs)});
+        console.log("Array", docs)
+        console.log("State:", this.state);
+      
+      });
 
-
-  };
+  }
 
 render() {
 
@@ -112,6 +123,10 @@ render() {
            Hello Overview!!
           </h1>
         </header>
+        
+        <SortSelector sortBy={this.props.sortBy} setSortBy={this.props.setSortBy} onApply={this.reloadMemes} />
+        <Filter filterState={this.props.filterState} setFilterState={this.props.setFilterState} onApply={this.reloadMemes} />
+
           <div>
           <InfiniteScroll
             dataLength={this.state.items.length}
@@ -130,7 +145,7 @@ render() {
               //Meme elements
               //TODO: Add rating and link to single view page
               <div className="Overview-meme" key={meme._id}>
-                <Link to={"/meme/" + meme._id}>
+                <Link to={"/meme/" + meme._id} state={this.state}>
                 <img src={meme.image} alt="Meme" width="600"/>
                 </Link>
                  <br/>

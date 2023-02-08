@@ -1,5 +1,6 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import Filter from "../components/filter";
 import './navbar.css';
 
 
@@ -19,8 +20,11 @@ return memeObject;
 }
 
 
-function Meme() {
+function Meme(props) {
 
+  //get filter information from location.state
+  const location = useLocation();
+  
   const {memeId} = useParams();
   const [memeObject, setMemeObject] = useState();
 
@@ -59,9 +63,11 @@ function Meme() {
            Hello Singleview! <br/>
           MemeId: {memeId} <br/>
           Title: {memeObject.title} <br/>
-          Created by: {memeObject.creator.username}
+          Created by: {memeObject.creator.username} <br/>
+          Filterstate: {props.filterState.attr}
           </p>
         </header>
+        <Filter filterState={props.filterState} setFilterState={props.setFilterState} />
         <img src={memeObject.image} alt="Meme" width="800"/>
       </div>
     );
