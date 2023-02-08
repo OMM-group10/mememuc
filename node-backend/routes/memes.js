@@ -57,22 +57,26 @@ router.get('/', function(req, res, next) {
   /memes/list
 */
 //TODO: add functionality for filters/queries
-router.get('/list', function(req, res, next) {
+router.get('/page', function(req, res, next) {
 
-  //create query
-
+  
+  //default options for paging
   let options = {
     limit: PAGESIZE,
-    sort: {title: 1}
+    sort:{}
   }
 
-  //if page number is specified skip earlier entries
-  let queryOptions = JSON.parse(req.query.options);
-  if(queryOptions.page) options.skip = queryOptions.page * PAGESIZE;
-  if (queryOptions.sort) options.sort = queryOptions.sort;
+  //parsed URL parameter object
+  const params = JSON.parse(req.query.params);
+  console.log(params);
 
-  console.log(queryOptions);
-  
+  //if page number is specified skip earlier entries
+  options.limit = params.paging.pageSize;
+  //skip to current page
+  options.skip = params.paging.pageSize * params.paging.page;
+  options.sort[params.sortBy.attr] = params.sortBy.order;
+
+  console.log(options);
 
   //get meme collection
   let memes = req.db.get("Memes");
