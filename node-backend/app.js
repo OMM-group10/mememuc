@@ -62,7 +62,8 @@ app.use('/login', (req,res,next) => {
       const token = jwt.create(claims, 'our-server-seceret');
       token.setExpiration(new Date().getTime() + 60 * 1000);
       const jwtTokenSting = token.compact();
-      res.send(jwtTokenSting);
+      const response = {token: jwtTokenSting};
+      res.json(response);
     }).catch(() => {
       res.set('WWW-Authenticate', 'Basic realm="401"');
       res.status(401).send();

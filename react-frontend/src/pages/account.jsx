@@ -7,19 +7,20 @@ import './navbar.css';
 
 
 function Account() {
-    const [userData, setUserData] = useState({name: "anonymous"});
+    const [userData, setUserData] = useState("anonymous");
     const [username, setUsername] = useState({username:""});
     const [password, setPassword] = useState({password:""});
 
     const loginUser = () => {
       console.log("Button got clicked! User's name:", username);
       handleLogin(username, password);
+      setUserData(username);
     }
 
     return (
       <header className="App-header">
           <p>
-           Hello {userData.name}!
+           Hello {userData}!
           </p>
           <p>This is not you? Sign in here:</p>
           <form>
