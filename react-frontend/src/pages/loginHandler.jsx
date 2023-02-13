@@ -20,8 +20,11 @@ function handleLogin (username, password) {
       pass: password
     };
     console.log(JSON.stringify(loginPayload));
+
+
+
   
-    fetch("http://localhost:3001/login", {
+  fetch("http://localhost:3001/login", {
         method:"post",
         headers: {
             'Accept': 'application/json',
@@ -30,10 +33,11 @@ function handleLogin (username, password) {
 
         body: JSON.stringify(loginPayload)
     })
-    .then(response => console.log(response))
-    .then(response => response.json())
-    .then(storeToken)
-    .catch(err => console.error("In function handleLogin this error occured:", err))
-  };
-  //TODO: catch error that occurs here, seems to have a problem with the answer of the API
+    .then(res => console.log(res.body))
+    //.then(response => response.json())
+    //.then(response => console.log(JSON.stringify(response)))
+    .catch(err => console.error("In function handleLogin this error occured:", err));
+
+  }
+//ToDo: Find a way to get the JWTToken out of the response and pass it to the storeToken-Function
 export default handleLogin;
