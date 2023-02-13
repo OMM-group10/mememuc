@@ -50,26 +50,23 @@ app.use(function(req,res,next){
 // React-Frontend sends POST-Request for Authentication
 // TODO: implement password-chech, maybe by using a hash?
 app.use('/login', (req,res,next) => {
-  console.log(req.body.user, req.body.pass);
+  //console.log(req.body.user, req.body.pass);
   if(!req.body.user || !req.body.pass){
-    res.set('WWW-Authenticate', 'Basic realm="401"')
-    res.status(401).send()
-    return
+    res.set('WWW-Authenticate', 'Basic realm="401"');
+    res.status(401).send();
   }else{
     const users = db.get('users');
-    const matchedUser = users.findOne({username: req.body.user},{});
-    if(!matchedUser){
-      res.set('WWW-Authenticate', 'Basic realm="401"')
-      res.status(401).send()
-      return
-    }else{
-      const jwt = require('njwt')
-      const claims = {username: matchedUser.username}
-      const token = jwt.create(claims, 'our-server-seceret')
-      token.setExpiration(new Date().getTime() + 60 * 1000)
-      const jwtTokenSting = token.compact()
-      res.send(jwtTokenSting)
-    }
+    users.findOne({username: req.body.user, pass: req.body.pass},{}).then(matchedUser => {
+      const jwt = require('njwt');
+      const claims = {username: matchedUser.username};
+      const token = jwt.create(claims, 'our-server-seceret');
+      token.setExpiration(new Date().getTime() + 60 * 1000);
+      const jwtTokenSting = token.compact();
+      res.send(jwtTokenSting);
+    }).catch(() => {
+      res.set('WWW-Authenticate', 'Basic realm="401"');
+      res.status(401).send();
+    });
   }
 })
 
