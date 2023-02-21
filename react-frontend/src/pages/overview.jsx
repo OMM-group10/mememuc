@@ -149,7 +149,8 @@ render() {
                 <img src={meme.image} alt="Meme" width="600"/>
                 </Link>
                  <br/>
-                {meme.title} - #{index}
+                {meme.title} - #{index} <br/>
+                Rating: {meme.rating} Created on: {new Date(meme.creationDate).toDateString()}
               </div>
             ))}
           </InfiniteScroll>
