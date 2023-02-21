@@ -1,0 +1,41 @@
+.Templates{
+    float: left;
+    width: 25%;
+}
+
+.Canvas{
+    float: left;
+    width: 50%;
+}
+
+.Canvas img {
+    display: block;
+}
+
+.Caption1 {
+    position: absolute;
+    margin-top: -350px;
+    margin-left: 100px;
+}
+
+.Caption2 {
+    position: absolute;
+    margin-top: -100px;
+    margin-left: 100px;
+}
+
+.Params{
+    float: left;
+    width: 25%;
+}
+
+.Editor-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  }
