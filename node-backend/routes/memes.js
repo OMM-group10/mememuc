@@ -5,6 +5,20 @@ var renderer = require('../renderer');
 //number of memes per API Call to list
 const PAGESIZE = 10;
 
+//parse filter options and return dbQuery object
+const parseQuery = params => {
+
+  let dbQuery = {};
+  //if filters 
+  if (params.filter.use){
+    dbQuery[params.filter.attr] = {};
+    dbQuery[params.filter.attr][params.filter.comparison] = Number(params.filter.value);
+    }
+    console.log("dbQuery: ", dbQuery);
+  
+  return dbQuery;
+}
+
 /* GET meme information.
   memes/?meme='memeId'
 */
@@ -52,11 +66,34 @@ router.get('/', function(req, res, next) {
   /* res.render('index', { title: 'Express' }) */
 });
 
+//returns random meme that matches query filter
+router.get('/random', (req, res, next) => {
 
-/* GET a list of all memes
-  /memes/list
+  console.log("Query: ");
+  let dbQuery = {}
+  if (req.query.params){
+      //parse url query
+      dbQuery = parseQuery(JSON.parse(req.query.params));
+  }
+
+  //get meme collection
+  let memes = req.db.get("Memes");
+
+  //find memes in db
+  memes.find(dbQuery,{})
+  .then(memes => {
+    //select random meme
+    const index = Math.floor(Math.random() * memes.length);
+    res.json(memes[index]);
+  })
+  .catch(err=>res.json(err));
+
+});
+
+/*
+Responds with a page of memes
+Filter, Sort and Paging options are parsed from the URL query
 */
-//TODO: add functionality for filters/queries
 router.get('/page', function(req, res, next) {
 
   
