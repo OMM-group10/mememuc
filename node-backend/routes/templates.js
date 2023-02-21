@@ -17,6 +17,19 @@ router.get('/', function(req, res, next) {
       .catch((e) => res.status(500).send())
 });
 
+//return list of all templates
+router.get('/list', (req, res, next) => {
+
+    //get collection
+    const templates = req.db.get('Templates');
+
+    //query all templates and respond with query result
+    templates.find({},{})
+    .then(templates => res.json(templates))
+    .catch(err => res.json(err));
+
+})
+
 /* GET all memes created with template specified in query. */
 router.get('/memes', function(req, res, next) {
     const db = req.db;
