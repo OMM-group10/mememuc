@@ -17,7 +17,7 @@ function Filter({filterState, setFilterState, onApply = (()=>{})}){
     const handleFilterChange = (e) => {
                 setState((prev)=>{
                 console.log("Previous State:", prev);
-                return {...prev, [e.target.name]: e.target.value}
+                return {...prev, [e.target.name]: e.target.value, use: 1}
                 })
             }
         

@@ -78,11 +78,20 @@ router.get('/page', function(req, res, next) {
 
   console.log(options);
 
+  let dbQuery = {};
+  //dbQuery[params.filter.attr][params.filter.comparison] = params.filter.value;
+  //dbQuery["test"] = 0;
+  if (params.filter.use){
+  dbQuery[params.filter.attr] = {};
+  dbQuery[params.filter.attr][params.filter.comparison] = Number(params.filter.value);
+  }
+  console.log("dbQuery: ", dbQuery);
+
   //get meme collection
   let memes = req.db.get("Memes");
 
   //find memes and return to client
-  memes.find({},options).then(docs=>res.json(docs));
+  memes.find(dbQuery,options).then(docs=>res.json(docs));
 
 });
 
@@ -169,7 +178,8 @@ router.post('/create', async function(req, res, next) {
   //create new dbDocument
   doc.creationDate = new Date();
   doc.image = "";
-  doc.rating = 0;
+  //to test filtering TODO: change back to 0
+  doc.rating = Math.floor(Math.random()*50);
   doc.comments = [];
 
 
