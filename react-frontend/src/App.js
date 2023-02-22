@@ -54,7 +54,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/editor' element={<Editor state={editorState} setState={setEditorState} />} />            
-          <Route path='/account' element={<Account />} /> 
+          <Route path='/account' element={<Account editorState={editorState} setEditorState={setEditorState} />} /> 
           <Route path='/overview' element={<Overview sortBy={sortBy} setSortBy={setSortBy} filterState={filterState} setFilterState={setFilterState}/>} /> 
           <Route path='/documentation' element={<Documentation />} />
           <Route path='/meme/:memeId' element={<Meme sortBy={sortBy} setSortBy={setSortBy} filterState={filterState} setFilterState={setFilterState}/>} />
