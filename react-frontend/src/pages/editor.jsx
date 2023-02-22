@@ -1,8 +1,31 @@
 import { Link } from "react-router-dom";
 import './navbar.css';
+import './editor.css';
 import {createMeme} from './documentation'
+import CaptionEditor from "../components/captionEditor";
 import React, { useEffect, useState, useLayoutEffect } from "react";
 
+
+const defaultState = {
+  title:"New Meme",
+  template: 'Doge',
+  //TODO: change to actual user/annonymous
+  user: "testuser1",
+  captions:[{
+    xPosition: 0.5,
+    yPosition: 0.2,
+    text: "Top Text",
+    fontSize: 100,
+    color: "white"
+  },
+  {
+    xPosition: 0.5,
+    yPosition: 0.8,
+    text: "Bottom Text",
+    fontSize: 100,
+    color: "white"
+  }]
+}
 
 
 //TODO: Clear Button
@@ -37,23 +60,27 @@ function Editor(props) {
   } 
 
   //create download button
-  const createDownload = e => {
+  const createLocally= e => {
     const imageData = cnv.current.toDataURL('png');
     const link = download.current;
 
     link.setAttribute('download', new Date().toLocaleString() + "_meme");
     link.setAttribute('href', imageData);
     link.setAttribute('style', '');
+    alert("Meme was created locally!");
   }
 
   //create Meme on server and render download button
-  const createUpload = e => {
+  const createOnServer = e => {
     createMeme(props.state)
     .then(res=>{
       const link = download.current;
       link.setAttribute('download', new Date().toLocaleString() + "_meme");
       link.setAttribute('href', res.image);
+      link.setAttribute('target', '_blank');
+      link.setAttribute('rel', 'noopener noreferrer');
       link.setAttribute('style', '');
+      alert("Meme was created on server!");
     })
   }
 
@@ -153,47 +180,39 @@ function Editor(props) {
           <Link to="/documentation" className="link">Documentation</Link>
         </li>
       </ul>
-      <div>
-      <button onClick={createUpload} >Create Meme</button>
-      <button onClick={createDownload}>Create Meme locally</button>
-      <button onClick={()=>{createMeme(props.state, true)}}>Save draft</button>
-      <a ref={download} download={new Date().toLocaleString() + "_meme"} style={{display: 'none'}}><button>Download Meme</button></a>
-      </div>
-      <ul className="template-list">
-        {
-          [...templateMap.keys()].map((k) => {
-        return(<li key={k}> <img crossOrigin="Anonymous" src= {'http://localhost:3001' + templateMap.get(k).url} width="300" onClick={e => {templateHandler(k)}}/> </li>)
-          })
-          }
-      </ul> <br/>
-          Title: <input type="text" name="title" value={props.state.title} onChange={e=>{props.setState(prev=>{return{...prev, title: e.target.value}})}} />
-          <form>
-          Top Text: <input type="text" name="text" value={props.state.captions[0].text} onChange={e=>{changeHandler(0,e)}}/>
-          Color: <select name="color" value={props.state.captions[0].color} onChange={e=>{changeHandler(0,e)}}>
-                  <option value="white">white</option>
-                  <option value="blue">blue</option>
-                  <option value="red">red</option>
-                  <option value="green">green</option>
-                  <option value="yellow">yellow</option>
-                </select>
-          xPosition: <input type="number" name="xPosition" min="0" max="1" step="0.05" value={props.state.captions[0].xPosition} onChange={e=>{changeHandler(0,e)}}></input>
-          yPosition: <input type="number" name="yPosition" min="0" max="1" step="0.05" value={props.state.captions[0].yPosition} onChange={e=>{changeHandler(0,e)}}></input>
-          </form>
-          <form>
-          Bottom Text: <input type="text" name="text" value={props.state.captions[1].text} onChange={e=>{changeHandler(1,e)}}/>
-          Color: <select name="color" value={props.state.captions[1].color} onChange={e=>{changeHandler(1,e)}}>
-                  <option value="white">white</option>
-                  <option value="blue">blue</option>
-                  <option value="red">red</option>
-                  <option value="green">green</option>
-                  <option value="yellow">yellow</option>
-                </select>
-          xPosition: <input type="number" name="xPosition" min="0" max="1" step="0.05" value={props.state.captions[1].xPosition} onChange={e=>{changeHandler(1,e)}}></input>
-          yPosition: <input type="number" name="yPosition" min="0" max="1" step="0.05" value={props.state.captions[1].yPosition} onChange={e=>{changeHandler(1,e)}}></input>
-          </form>
+      <div className="template-list">
+          Templates:
+          {
+            [...templateMap.keys()].map((k) => {
+          return(<img key={k} crossOrigin="Anonymous" src= {'http://localhost:3001' + templateMap.get(k).url} width="300" className="template" onClick={e => {templateHandler(k)}}/>)
+            })
+            }
+        </div>
 
-          
-          <canvas ref={cnv}></canvas>
+      <div className="editor-area">
+          <div>
+            <button onClick={createOnServer} >Create Meme</button>
+            <button onClick={createLocally}>Create Meme locally</button>
+            <button onClick={()=>{createMeme(props.state, true)}}>Save draft</button>
+            <a ref={download} download={new Date().toLocaleString() + "_meme"} style={{display: 'none'}}><button>Download Meme</button></a>
+          </div>
+
+          <div>
+            Title: <input type="text" name="title" value={props.state.title} onChange={e=>{props.setState(prev=>{return{...prev, title: e.target.value}})}} />
+            <button onClick={e=>{props.setState(defaultState)}}>Reset Editor</button>
+
+            <form>
+              Top Caption:
+              <CaptionEditor {...props} index={0}></CaptionEditor>
+              Bottom Caption: 
+              <CaptionEditor {...props} index={1}></CaptionEditor>
+            </form>
+          </div>
+
+          <canvas className="meme-canvas" ref={cnv}></canvas>
+
+        </div>
+
       </div>
         
 

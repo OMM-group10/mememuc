@@ -1,14 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import './navbar.css';
 import React, { useEffect, useState } from "react";
 
 
 function Account(props) {
-
+  //to navigate to other pages
+  const navigate = useNavigate();
+  //created memes
   const [history, setHistory] = useState([]);
+  //created drafts
   const [drafts, setDrafts] = useState([]);
+  //TODO: use authentication
   const username = "testuser1"
 
+  
   useEffect(()=>{
     //fetch meme history
     fetch('http://localhost:3001/users/history' + '?user=' + username)
@@ -66,7 +71,9 @@ function Account(props) {
             delete state['creator'];
             delete state['_id'];
             return({...state, user:'testuser1'})
-          })}}>
+          })
+          navigate('/editor');
+          }}>
               {draft.title}
             </button>
             )
