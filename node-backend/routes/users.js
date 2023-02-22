@@ -1,6 +1,23 @@
 var express = require('express');
 var router = express.Router();
 
+router.post('/login', async (req, res, next) => {
+  const username = req.body.username;
+  const password = req.body.password;
+
+  const users = req.db.get("Users");
+  //get userid from db
+  let user = await users.findOne({username: username});
+  if(!user) return res.status(400).json("User not found");
+
+  if(password==user.password){
+  res.json({token: "Token1", username: username, password: password});
+  }
+  else{
+    res.status(401).json("Wrong user or Password");
+  }
+});
+
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   const db = req.db;
