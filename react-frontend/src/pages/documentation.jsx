@@ -15,11 +15,13 @@ import './navbar.css';
                         captions[]
                       } 
  */
-  function createMeme(memeObject){
-    
+  function createMeme(memeObject, draft=false){
+
+    let url = "http://localhost:3001/memes/create";
+    if(draft) url = "http://localhost:3001/memes/draft"
     //TODO: Change Back URL
     return(
-    fetch("http://localhost:3001/memes/create", {
+    fetch(url, {
       method: "post",
       headers: {
         'Accept': 'application/json',
