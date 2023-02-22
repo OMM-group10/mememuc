@@ -67,10 +67,6 @@ function Filter({filterState, setFilterState, onApply = (()=>{})}){
     return(
       
         <div>
-          Filter Object: {state.attr}
-          <br/>
-          Value: {state.value}
-
             <form onSubmit={submitFilter} onReset={resetFilter}>
               <label>
                 Filter:
