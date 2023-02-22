@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import './navbar.css';
 import {createMeme} from './documentation'
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 
 
 
@@ -9,13 +9,15 @@ import React, { useEffect, useState } from "react";
 //TODO: Download Link
 function Editor(props) {
 
-
   //map of available Templates
   const [templateMap, setTemplateMap] = useState(new Map());
   //reference to canvas element
   const cnv = React.useRef(null);
   //reference to download link
   const download = React.useRef(null);
+
+
+
 
   //set template in state
   const templateHandler = template => {
@@ -67,24 +69,29 @@ function Editor(props) {
         map.set(template.name, template);
       }
       setTemplateMap(map);
+
       //for debugging
       //console.log("Map: ", templateMap);
     })
     .catch(err=>console.error(err));
-
-    //draw canvas
-
-    },[]);
+    
+    }, []);
 
   //draw on canvas
-  useEffect(()=>{
+  useEffect(() => {
+    //get active template
+    const template = templateMap.get(props.state.template);
+    if(!template) {
+      console.log("Templates not ready: ", new Date());
+      return;
+    }
+    console.log("Template ready: ", new Date());
+
     let canvas = cnv.current;
     let ctx = canvas.getContext("2d");
     let background = new Image();
     background.crossOrigin = "Anonymous";
     
-    //get active template
-    let template = templateMap.get(props.state.template);
     //if defined use it as background
     if(template){ background.src ='http://localhost:3001' + template.url};
     
@@ -125,7 +132,7 @@ function Editor(props) {
       false
     );
 
-  })
+  },[props, templateMap])
 
     return (
       <div className="Editor">
@@ -149,6 +156,7 @@ function Editor(props) {
       <div>
       <button onClick={createUpload} >Create Meme</button>
       <button onClick={createDownload}>Create Meme locally</button>
+      <button onClick={()=>{createMeme(props.state, true)}}>Save draft</button>
       <a ref={download} download={new Date().toLocaleString() + "_meme"} style={{display: 'none'}}><button>Download Meme</button></a>
       </div>
       <ul className="template-list">
@@ -158,6 +166,7 @@ function Editor(props) {
           })
           }
       </ul> <br/>
+          Title: <input type="text" name="title" value={props.state.title} onChange={e=>{props.setState(prev=>{return{...prev, title: e.target.value}})}} />
           <form>
           Top Text: <input type="text" name="text" value={props.state.captions[0].text} onChange={e=>{changeHandler(0,e)}}/>
           Color: <select name="color" value={props.state.captions[0].color} onChange={e=>{changeHandler(0,e)}}>
