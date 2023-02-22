@@ -90,6 +90,35 @@ router.get('/random', (req, res, next) => {
 
 });
 
+//responds with all memes, that match query
+router.get('/all', (req, res, next) => {
+  console.log("Query: ");
+
+  let params = {}
+  let options = {
+    sort: {}
+  }
+  let dbQuery = {}
+
+  if (req.query.params){
+      //parse url query
+      params = JSON.parse(req.query.params);
+      dbQuery = parseQuery(params);
+      options.sort[params.sortBy.attr] = params.sortBy.order;
+  }
+  //get meme collection
+  let memes = req.db.get("Memes");
+
+  //find memes in db
+  memes.find(dbQuery,options)
+  .then(memes => {
+    res.json(memes);
+  })
+  .catch(err=>res.json(err));
+
+});
+
+
 /*
 Responds with a page of memes
 Filter, Sort and Paging options are parsed from the URL query
