@@ -1,3 +1,39 @@
+.Editor{
+    background-color: #282c34;
+}
+
+.template-list{
+    position: absolute;
+    left: 0px;
+    width: 25vw;
+    height:80%;
+    display:inline
+}
+
+.template{
+    display: block;
+    margin: auto;
+}
+
+.template:hover{
+    padding: 5px;
+    background-color: aliceblue;
+}
+
+.editor-area{
+    height:fit-content;
+}
+
+.meme-canvas{
+padding: 5px;
+display: inline-block;
+}
+
+.image-area{
+    background-color: blueviolet;
+    width:100vw;
+}
+
 .Templates{
     float: left;
     width: 25%;
