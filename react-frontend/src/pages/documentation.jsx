@@ -18,6 +18,7 @@ import './navbar.css';
   function createMeme(memeObject){
     
     //TODO: Change Back URL
+    return(
     fetch("http://localhost:3001/memes/create", {
       method: "post",
       headers: {
@@ -29,8 +30,11 @@ import './navbar.css';
       body: JSON.stringify(memeObject)
     })
     .then(res => res.json())
-    .then(resJson => console.log("Success", resJson))
-    .catch(err => console.error("Error", err));
+    .then(resJson =>{
+      console.log("Success", resJson);
+      return resJson;
+      })
+    .catch(err => console.error("Error", err)))
     
   }
   
@@ -151,4 +155,5 @@ function Documentation() {
     );
   }
   
+  export {createMeme};
   export default Documentation;
