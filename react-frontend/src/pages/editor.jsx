@@ -1,46 +1,136 @@
 import { Link } from "react-router-dom";
-import { TextField } from "@mui/material";
 import './navbar.css';
-import './editor.css';
-import Futurama_Meme from './Futurama_Meme.jpeg';
-import React, { useState } from "react";
-import EditorComponent from "./editor-comp";
+import {createMeme} from './documentation'
+import React, { useEffect, useState } from "react";
 
-function Editor() {
-  const [Caption1, setCaption1] = useState("");
-  const [Caption2, setCaption2] = useState("");
-  const generatedMeme = {
-    template: "Doge",
-    user: "ben",
-    captions: [
-      {
-        xPosition: 0,
-        yPosition: 0,
-        text: "Caption1",
-        fontSize: 9
-      },
-      {
-        xPosition: 23,
-        yPosition: 15,
-        text: "Caption2",
-        fontSize: 10
+
+
+//TODO: Clear Button
+//TODO: Download Link
+function Editor(props) {
+
+
+  //map of available Templates
+  const [templateMap, setTemplateMap] = useState(new Map());
+  //reference to canvas element
+  const cnv = React.useRef(null);
+  //reference to download link
+  const download = React.useRef(null);
+
+  //set template in state
+  const templateHandler = template => {
+    props.setState(prev=>{
+      return({...prev, template: template});
+    })
+  }
+
+  //handle changes of caption properties
+  const changeHandler = (index,e) => {
+    props.setState(prev=>{
+      prev.captions[index][e.target.name] = e.target.value;
+      //console.log(prev);
+      return({...prev});
+    })
+
+  } 
+
+  //create download button
+  const createDownload = e => {
+    const imageData = cnv.current.toDataURL('png');
+    const link = download.current;
+
+    link.setAttribute('download', new Date().toLocaleString() + "_meme");
+    link.setAttribute('href', imageData);
+    link.setAttribute('style', '');
+  }
+
+  //create Meme on server and render download button
+  const createUpload = e => {
+    createMeme(props.state)
+    .then(res=>{
+      const link = download.current;
+      link.setAttribute('download', new Date().toLocaleString() + "_meme");
+      link.setAttribute('href', res.image);
+      link.setAttribute('style', '');
+    })
+  }
+
+  //get available templates, and store them in map
+  useEffect(()=>{
+    //get meme templates:
+    fetch('http://localhost:3001/templates/list')
+    .then(res=>res.json()).then(templates=>{
+      //console.log(templates);
+      let map = new Map();
+      //Add to map
+      for(let template of templates){
+        map.set(template.name, template);
       }
-    ],
-    title: "doge1"
-  };
+      setTemplateMap(map);
+      //for debugging
+      //console.log("Map: ", templateMap);
+    })
+    .catch(err=>console.error(err));
 
+    //draw canvas
 
+    },[]);
 
-  const saveMeme = () => {fetch("http://localhost:3001/memes/create", 
-                    {method: "POST", body: JSON.stringify(generatedMeme)}).
-                    then((response) => 
-                          console.log("API answered with: ", response))}
+  //draw on canvas
+  useEffect(()=>{
+    let canvas = cnv.current;
+    let ctx = canvas.getContext("2d");
+    let background = new Image();
+    background.crossOrigin = "Anonymous";
+    
+    //get active template
+    let template = templateMap.get(props.state.template);
+    //if defined use it as background
+    if(template){ background.src ='http://localhost:3001' + template.url};
+    
+    canvas.width = 700;
+    //ratio by which image was scaled to fit canvas is later used to scale text as well
+    let scale = (canvas.width/background.naturalWidth);
 
-  return (
-    <div className="Editor">
-    <header>
-      <ul>
-      <li>
+    canvas.height = (scale * background.naturalHeight);
+
+    //draw background when loaded
+    background.addEventListener(
+      "load",
+      () => {
+        //draw image scaled
+        ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+
+            //Draw text
+        for (let cap of props.state.captions){
+              
+          ctx.font = scale * cap.fontSize + "px" + " Impact";
+          ctx.textAlign = "center";
+
+          //Start with Outline
+          ctx.strokeStyle = "black";
+          ctx.miterLimit = 2;
+          ctx.lineJoin = 'circle';
+          ctx.lineCap = 'round';
+          ctx.lineWidth = cap.fontSize/14;
+          ctx.strokeText(cap.text, cap.xPosition * canvas.width, cap.yPosition * canvas.height);
+
+          //Fill in Text
+          ctx.fillStyle = cap.color;
+          ctx.fillText(cap.text, cap.xPosition * canvas.width, cap.yPosition * canvas.height);
+
+          } 
+
+      },
+      false
+    );
+
+  })
+
+    return (
+      <div className="Editor">
+        <ul>
+        <li>
           <Link to="/" className="link">Home </Link>
         </li>
         <li>
@@ -56,51 +146,49 @@ function Editor() {
           <Link to="/documentation" className="link">Documentation</Link>
         </li>
       </ul>
-      </header>
-      <body>
-      <div className="Editor-header">
-        <div className="Templates">
-          <p> Templates: </p>
-        </div>
-        <div className="Canvas">
-          <img src={Futurama_Meme} name= "Futurama Meme" alt="Ein Meme aus Futurama"/>
-          <p className="Caption1">{Caption1} </p><br></br>
-          <p className="Caption2">{Caption2} </p>
-        </div>
-        <div className="Params">
+      <div>
+      <button onClick={createUpload} >Create Meme</button>
+      <button onClick={createDownload}>Create Meme locally</button>
+      <a ref={download} download={new Date().toLocaleString() + "_meme"} style={{display: 'none'}}><button>Download Meme</button></a>
+      </div>
+      <ul className="template-list">
+        {
+          [...templateMap.keys()].map((k) => {
+        return(<li key={k}> <img crossOrigin="Anonymous" src= {'http://localhost:3001' + templateMap.get(k).url} width="300" onClick={e => {templateHandler(k)}}/> </li>)
+          })
+          }
+      </ul> <br/>
           <form>
-            <TextField 
-              id="topText"
-              label="Upper Text"
-              variant="outlined"
-              value={Caption1}
-              onChange={(top) => {
-                  //<EditorComponent addCaption({Caption1}) />
-                  setCaption1(top.target.value);
-                }} />
-            <TextField id="topX" label="X-Position" variant="outlined" />
-            <TextField id="topY" label="Y-Position" variant="outlined" />
-          </form><br></br>
-
+          Top Text: <input type="text" name="text" value={props.state.captions[0].text} onChange={e=>{changeHandler(0,e)}}/>
+          Color: <select name="color" value={props.state.captions[0].color} onChange={e=>{changeHandler(0,e)}}>
+                  <option value="white">white</option>
+                  <option value="blue">blue</option>
+                  <option value="red">red</option>
+                  <option value="green">green</option>
+                  <option value="yellow">yellow</option>
+                </select>
+          xPosition: <input type="number" name="xPosition" min="0" max="1" step="0.05" value={props.state.captions[0].xPosition} onChange={e=>{changeHandler(0,e)}}></input>
+          yPosition: <input type="number" name="yPosition" min="0" max="1" step="0.05" value={props.state.captions[0].yPosition} onChange={e=>{changeHandler(0,e)}}></input>
+          </form>
           <form>
-            <TextField
-              id="bottomText"
-              label="Lower Text"
-              variant="outlined" 
-              value={Caption2}
-              onChange={(bottom) => {
-                  setCaption2(bottom.target.value);
-                }} />
-            <TextField id="bottomX" label="X-Position" variant="outlined" />
-            <TextField id="bottomY" label="Y-Position" variant="outlined" />
+          Bottom Text: <input type="text" name="text" value={props.state.captions[1].text} onChange={e=>{changeHandler(1,e)}}/>
+          Color: <select name="color" value={props.state.captions[1].color} onChange={e=>{changeHandler(1,e)}}>
+                  <option value="white">white</option>
+                  <option value="blue">blue</option>
+                  <option value="red">red</option>
+                  <option value="green">green</option>
+                  <option value="yellow">yellow</option>
+                </select>
+          xPosition: <input type="number" name="xPosition" min="0" max="1" step="0.05" value={props.state.captions[1].xPosition} onChange={e=>{changeHandler(1,e)}}></input>
+          yPosition: <input type="number" name="yPosition" min="0" max="1" step="0.05" value={props.state.captions[1].yPosition} onChange={e=>{changeHandler(1,e)}}></input>
           </form>
 
-          <button onClick={saveMeme}> Save </button>
-        </div>
-        </div> 
-      </body>
-    </div>
-  );
-}
+          
+          <canvas ref={cnv}></canvas>
+      </div>
+        
 
-export default Editor;
+    );
+  }
+  
+  export default Editor;
