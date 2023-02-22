@@ -269,6 +269,51 @@ router.post('/create', async function(req, res, next) {
 
 });
 
-
+router.post('/draft', async function(req, res, next){
+    //get collections
+    let drafts = req.db.get("Drafts");
+    let users = req.db.get("Users");
+    let templates = req.db.get("Templates");
+  
+    let doc = req.body;
+  
+    console.log(doc);
+  
+    //find creatorId
+    let user = await users.findOne({username: doc.user});
+    if(user == null){ doc.creator = "anonymous"}
+    else{ doc.creator = user._id;};
+    delete doc.user;
+  
+  
+    //get template
+    let templateObject = await templates.findOne({name: doc.template});
+    if(templateObject == null){
+      //template not found
+      res.status(404).send("Template not found");
+      return;
+    }
+    
+  
+    //TODO: link meme image/render meme image
+    let dbObject
+  
+    //insert meme in db and return result
+    try{
+      dbObject = await drafts.insert(doc);
+    }
+    catch(err){
+      console.error(err);
+      res.status(500).send("Error while creating entry in Database")
+      return;
+    }
+  
+      console.log(dbObject);
+      res.json(dbObject);
+  
+    //res.json(doc);
+    
+  
+});
 
 module.exports = router;
