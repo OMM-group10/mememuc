@@ -13,6 +13,27 @@ import { useState } from 'react';
 
 function App() {
 
+  const [editorState, setEditorState] = useState({
+    title:"New Meme",
+    template: 'Doge',
+    //TODO: change to actual user/annonymous
+    user: "testuser1",
+    captions:[{
+      xPosition: 0.5,
+      yPosition: 0.2,
+      text: "Top Text",
+      fontSize: 100,
+      color: "white"
+    },
+    {
+      xPosition: 0.5,
+      yPosition: 0.8,
+      text: "Bottom Text",
+      fontSize: 100,
+      color: "white"
+    }]
+  })
+
   const [filterState, setFilterState] = useState({
     use: 0,
     attr: "none",
@@ -32,7 +53,7 @@ function App() {
     <Router>
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/editor' element={<Editor />} />            
+          <Route path='/editor' element={<Editor state={editorState} setState={setEditorState} />} />            
           <Route path='/account' element={<Account />} /> 
           <Route path='/overview' element={<Overview sortBy={sortBy} setSortBy={setSortBy} filterState={filterState} setFilterState={setFilterState}/>} /> 
           <Route path='/documentation' element={<Documentation />} />
