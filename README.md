@@ -1,16 +1,16 @@
 # MemeMuc Launcher
 
 Features implemented:
-2. Editor - Text input - Intermediate Level
-4. Editor - Generation and Download - Intermediate Level
-5. Editor - Navigation - Intermediate Level
-6. API - Meme Creation - Intermediate Level
-7. API - Meme Retrieval - Intermediate Level
-8. View - Overview - Intermediate Level
-9. View - Single view - Intermediate Level
-10. View - Sort and Filter - Intermediate Level
-12. Profile - Authentification - Intermediate Level
-14. Profile - History - Advanced Level
+* 2. Editor - Text input - Intermediate Level
+* 4. Editor - Generation and Download - Intermediate Level
+* 5. Editor - Navigation - Intermediate Level
+* 6. API - Meme Creation - Intermediate Level
+* 7. API - Meme Retrieval - Intermediate Level
+* 8. View - Overview - Intermediate Level
+* 9. View - Single view - Intermediate Level
+* 10. View - Sort and Filter - Intermediate Level
+* 12. Profile - Authentification - Intermediate Level
+* 14. Profile - History - Advanced Level
 
 User credentials to test Profile features:
 * username: testuser0 password: test
