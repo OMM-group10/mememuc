@@ -6,7 +6,6 @@ import Account from './pages/account';
 import Overview from './pages/overview';
 import Documentation from './pages/documentation';
 import Meme from './pages/meme';
-import Test from './pages/test';
 import Login from './pages/login';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from 'react';
@@ -59,7 +58,6 @@ function App() {
           <Route path='/overview' element={<Overview sortBy={sortBy} setSortBy={setSortBy} filterState={filterState} setFilterState={setFilterState}/>} /> 
           <Route path='/documentation' element={<Documentation />} />
           <Route path='/meme/:memeId' element={<Meme sortBy={sortBy} setSortBy={setSortBy} filterState={filterState} setFilterState={setFilterState}/>} />
-          <Route path='/test' element={<Test sortBy={sortBy} setSortBy={setSortBy} filterState={filterState} setFilterState={setFilterState} />} />
           <Route path='/login' element={<Login />} />
         </Routes>
       </Router>
