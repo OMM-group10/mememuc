@@ -13,6 +13,11 @@ function Account(props) {
   //created drafts
   const [drafts, setDrafts] = useState([]);
   
+  const username = window.localStorage.getItem('userName');
+
+  let userInfo = <div>Not logged in</div>;
+
+  if(username) userInfo = <div>Logged in as: {username}</div>
 
   
   useEffect(()=>{
@@ -38,6 +43,7 @@ function Account(props) {
       <div className="Account">
         <Navbar/>
       <div>
+        {userInfo}
         Created memes: 
       {
         history.map(meme=>{
