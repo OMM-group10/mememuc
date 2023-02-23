@@ -1,7 +1,17 @@
 import { Link } from "react-router-dom";
+import Navbar from "../components/navbar";
 import './navbar.css';
 
-/* creates a meme by calling the API:
+
+  function serverRequest(url, options){
+    if(!options.headers) options.headers = {};
+    //check for login token
+    const token = window.localStorage.getItem('authToken');
+    if(token){options.headers['Authorization'] = 'Bearer ' + token}
+    return fetch(url, options);
+  }
+
+ /* creates a meme by calling the API:
     method: POST request
     URL: http://localhost:3001/memes/create
     Json data
@@ -21,7 +31,7 @@ import './navbar.css';
     if(draft) url = "http://localhost:3001/memes/draft"
     //TODO: Change Back URL
     return(
-    fetch(url, {
+    serverRequest(url, {
       method: "post",
       headers: {
         'Accept': 'application/json',
@@ -128,23 +138,7 @@ function Documentation() {
 
     return (
       <div className="Documentation">
-        <ul>
-        <li>
-          <Link to="/" className="link">Home </Link>
-        </li>
-        <li>
-          <Link to="/editor" className="link">Editor </Link>
-        </li>
-        <li>
-          <Link to="/account" className="link">Account </Link>
-        </li>
-        <li>
-          <Link to="/overview" className="link">Overview </Link>
-        </li>
-        <li>
-          <Link to="/documentation" className="link">Documentation</Link>
-        </li>
-      </ul>
+        <Navbar/>
       <header className="App-header">
           <p>
            Hello Documentation!
@@ -157,5 +151,5 @@ function Documentation() {
     );
   }
   
-  export {createMeme};
+  export {createMeme, serverRequest};
   export default Documentation;
