@@ -1,9 +1,14 @@
 import { Link } from "react-router-dom";
+import { serverRequest } from "./documentation";
 import React, {useState} from "react";
 import Navbar from "../components/navbar";
 
+const logout = ()=>{
+  window.localStorage.removeItem('userName');
+  window.localStorage.removeItem('authToken');
+}
 
-function Home(){
+function Login(){
 
   const[state, setState] = useState({username: "", password: ""});
 
@@ -30,8 +35,9 @@ function Home(){
     .catch(err=>console.log(err));
 
     if(authToken){
-      window.localStorage.setItem('username', state.username);
-      window.localStorage.setItem('authToken', authToken);
+      window.localStorage.setItem('userName', state.username);
+      window.localStorage.setItem('authToken', authToken.token);
+      alert("You were logged in");
     }
 
     console.log("From Server: ", authToken);
@@ -57,8 +63,10 @@ function Home(){
       </label>
       <button type="submit">Log in</button>
     </form>
+    <button onClick={e=>{serverRequest("http://localhost:3001/users/drafts?user=testuser1",{}).then(res=>res.json()).then(res=>console.log(res))}}>Test API Call</button>
   </div>
   );
 };
 
-export default Home;
+export {logout};
+export default Login;

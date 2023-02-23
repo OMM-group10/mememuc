@@ -3,6 +3,7 @@ import './navbar.css';
 import './editor.css';
 import {createMeme} from './documentation'
 import CaptionEditor from "../components/captionEditor";
+import Navbar from "../components/navbar";
 import React, { useEffect, useState, useLayoutEffect } from "react";
 
 
@@ -60,7 +61,7 @@ function Editor(props) {
   } 
 
   //create download button
-  const createLocally= e => {
+  const createLocally = e => {
     const imageData = cnv.current.toDataURL('png');
     const link = download.current;
 
@@ -82,6 +83,13 @@ function Editor(props) {
       link.setAttribute('style', '');
       alert("Meme was created on server!");
     })
+  }
+
+  const draftHandler = e => {
+    if(!window.localStorage.getItem('authToken')) alert("Not Logged in!")
+    else{
+      createMeme(props.state, true)
+    }
   }
 
   //get available templates, and store them in map
@@ -164,23 +172,7 @@ function Editor(props) {
 
     return (
       <div className="Editor">
-        <ul>
-        <li>
-          <Link to="/" className="link">Home </Link>
-        </li>
-        <li>
-          <Link to="/editor" className="link">Editor </Link>
-        </li>
-        <li>
-          <Link to="/account" className="link">Account </Link>
-        </li>
-        <li>
-          <Link to="/overview" className="link">Overview </Link>
-        </li>
-        <li>
-          <Link to="/documentation" className="link">Documentation</Link>
-        </li>
-      </ul>
+      <Navbar/>
       <div className="template-list">
           Templates:
           {
@@ -194,7 +186,7 @@ function Editor(props) {
           <div>
             <button onClick={createOnServer} >Create Meme</button>
             <button onClick={createLocally}>Create Meme locally</button>
-            <button onClick={()=>{createMeme(props.state, true)}}>Save draft</button>
+            <button onClick={draftHandler}>Save draft</button>
             <a ref={download} download={new Date().toLocaleString() + "_meme"} style={{display: 'none'}}><button>Download Meme</button></a>
           </div>
 

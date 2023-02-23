@@ -5,7 +5,7 @@ ul {
 
 li {
     display: inline;
-    border-right: 1px solid gray;
+    border-right: none;
   }
 
 .link{

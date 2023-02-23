@@ -1,6 +1,8 @@
 import { Link, useNavigate} from "react-router-dom";
+import Navbar from "../components/navbar";
 import './navbar.css';
 import React, { useEffect, useState } from "react";
+import { serverRequest } from "./documentation";
 
 
 function Account(props) {
@@ -16,7 +18,7 @@ function Account(props) {
   
   useEffect(()=>{
     //fetch meme history
-    fetch('http://localhost:3001/users/history' + '?user=' + username)
+    serverRequest('http://localhost:3001/users/history' + '?user=' + username, {})
     .then(res=>res.json()).then(memes => {
       console.log(memes);
       setHistory(memes);
@@ -24,7 +26,7 @@ function Account(props) {
     .catch(err=>console.error(err));
 
     //fetch saved drafts
-    fetch('http://localhost:3001/users/drafts' + '?user=' + username)
+    serverRequest('http://localhost:3001/users/drafts' + '?user=' + username, {})
     .then(res=>res.json()).then(drafts => {
       console.log(drafts);
       setDrafts(drafts);
@@ -35,24 +37,7 @@ function Account(props) {
 
     return (
       <div className="Account">
-        <ul>
-        <li>
-          <Link to="/" className="link">Home </Link>
-        </li>
-        <li>
-          <Link to="/editor" className="link">Editor </Link>
-        </li>
-        <li>
-          <Link to="/account" className="link">Account </Link>
-        </li>
-        <li>
-          <Link to="/overview" className="link">Overview </Link>
-        </li>
-        <li>
-          <Link to="/documentation" className="link">Documentation</Link>
-        </li>
-      </ul>
-
+        <Navbar/>
       <div>
         Created memes: 
       {
