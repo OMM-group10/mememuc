@@ -1,8 +1,10 @@
-import { Link } from "react-router-dom";
+import { json, Link } from "react-router-dom";
 import Navbar from "../components/navbar";
-import './navbar.css';
+import './documentation.css'
+//import './navbar.css';
 
 
+  //calls fetch with the specified url and options, also attaches authorization header if logged in
   function serverRequest(url, options){
     if(!options.headers) options.headers = {};
     //check for login token
@@ -106,6 +108,32 @@ import './navbar.css';
     
   }
 
+
+  function testCall(){
+    createMeme({
+      title:"New Meme",
+      template: 'Doge',
+      //TODO: change to actual user/annonymous
+      captions:[{
+        xPosition: 0.5,
+        yPosition: 0.2,
+        text: "Top Text",
+        fontSize: 100,
+        color: "white"
+      },
+      {
+        xPosition: 0.5,
+        yPosition: 0.8,
+        text: "Bottom Text",
+        fontSize: 100,
+        color: "white"
+      }]
+    },false).then(res=>{
+      let new_page = window.open();
+      new_page.document.write(JSON.stringify(res));
+    })
+  }
+
   //just to test stuff
 /*   createMeme({
     title: "test",
@@ -133,20 +161,70 @@ import './navbar.css';
  */
 
 
-
 function Documentation() {
 
     return (
       <div className="Documentation">
         <Navbar/>
-      <header className="App-header">
-          <p>
-           Hello Documentation!
-          </p>
+      
+          
+          Documentation: <br/>
+
+          <ul className="doc-api">
+          Create meme: 
+          <li>url: http://localhost:3001/memes/create</li>
+          <li>method: post</li>
+          <li>content-type: application/json</li>
+          <li>body: memeObject</li>
+          <li>response: memeDbObject </li>
+          <button onClick={testCall}>Example Call </button>
+          </ul> 
+
+
+
+          <ul className="doc-api">
+          Retrieve memes: 
+          <li>url: http://localhost:3001/memes</li>
+          <li>url search query: meme=memeid</li>
+          <li>method: get</li>
+          <li>response: memeDbObject</li>
+          <button onClick={()=>{window.open("http://localhost:3001/memes?meme=123", "_blank")}}>Example Call: meme=123</button>
+          </ul> 
+
+
+          <code>
+            memeDbObject = &#123; <br/>
+          _id: Id-String, <br/>
+          captions: Array[captionObject], <br/>
+          creationDate: Date-String,  <br/>
+          creator: Id-String, <br/>
+          image: String,  <br/>
+          rating: Number, <br/>
+          template: String, <br/>
+          title: String &#125;  <br/>
+          </code>
+          <br/>
+          <code>
+            memeObject = &#123; <br/>
+          captions: Array[captionObject], <br/>
+          template: String, <br/>
+          title: String &#125;  <br/>
+          </code>
+          <br/>
+          <code>
+          captionObject = &#123; <br/>
+          xPosition: Number, <br/>
+          yPosition: Number, <br/>
+          text: String, <br/>
+          fontSize: Number, <br/>
+          color: String &#125;  <br/>
+          </code>
+
+
           <button onClick={populateDb}>
         "Click to fill DB with random memes"
           </button>
-        </header>
+        
       </div>
     );
   }
