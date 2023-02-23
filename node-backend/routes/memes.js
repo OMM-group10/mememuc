@@ -2,10 +2,10 @@ var express = require('express');
 var router = express.Router();
 var renderer = require('../renderer');
 
-//number of memes per API Call to list
+//number of memes per page API Call to list per default
 const PAGESIZE = 10;
 
-//parse filter options and return dbQuery object
+//parse filter options and return dbQuery object to use in find
 const parseQuery = params => {
 
   let dbQuery = {};
@@ -28,63 +28,37 @@ router.get('/', async function(req, res, next) {
   //get collections from db
   let memes = req.db.get("Memes");
   let users = req.db.get("Users");
-  //let comments = req.db.get("Comments");
 
+  //id of meme db object
   let memeId
+
   //cast Object Id
   try{
     memeId = req.db.id(req.query.meme);
   }
   catch(err){
+    //id invalid
     console.error(err);
     return res.sendStatus(404);
   }
   //find meme in DB
   let meme = await memes.findOne({_id: memeId});
+  //meme not found
   if(!meme) return res.sendStatus(404);
+
   //If user anonymous return meme
   if(meme.creator=='anonymous') {
     meme.creator={username: 'anonymous'};
     res.json(meme);
   }
-  //if user registered find userdata and attach it
+
+  //if user registered, find userdata and attach it
   else{
     let creator = await users.findOne({_id: meme.creator});
     meme.creator = creator;
     res.json(meme);
   }
-  //find specified meme in collection
-/*   memes.findOne({_id: memeId})
-    .then(meme => {
 
-      //find creator
-      users.findOne({_id: meme.creator})
-        .then(user =>{
-
-          //add creator data to meme
-          meme.creator = user;
-
-          //find comments
-          comments.find({meme: meme._id})
-            .then(comments=>{
-
-              //add comments to meme data
-              meme.comments = comments;
-
-              //return meme data
-              res.json(meme);
-
-            })
-        })
-    })
- */ 
-  //TODO: add error handling
-  //TODO: Clean up layout
-
-
-  
-
-  /* res.render('index', { title: 'Express' }) */
 });
 
 //returns random meme that matches query filter
@@ -112,21 +86,28 @@ router.get('/random', (req, res, next) => {
 });
 
 //responds with all memes, that match query
+//Filter and Sort options are parsed from the URL query
 router.get('/all', (req, res, next) => {
-  console.log("Query: ");
+  //console.log("Query: ");
 
   let params = {}
+
+  //objects for find functions
   let options = {
     sort: {}
   }
   let dbQuery = {}
 
+  //if parameters specified
   if (req.query.params){
       //parse url query
       params = JSON.parse(req.query.params);
+      //parse dbQuery
       dbQuery = parseQuery(params);
+      //set sort options
       options.sort[params.sortBy.attr] = params.sortBy.order;
   }
+
   //get meme collection
   let memes = req.db.get("Memes");
 
@@ -184,7 +165,7 @@ router.get('/page', function(req, res, next) {
 
 
 
-//POST data to create a meme and save it in db
+//Endpoint to test stuff
 router.post('/test', async function(req, res, next) {
 
   //get collections
@@ -226,13 +207,15 @@ router.post('/test', async function(req, res, next) {
 });
 
 
-//test stuff
+//Endpoint to test stuff
 router.get('/test', function(req, res, next) {
 renderer.render();
 res.send("Hello");
 
 });
 
+
+//Create Meme and respond with created meme db object
 //TODO: Error handling
 router.post('/create', async function(req, res, next) {
 
@@ -241,14 +224,18 @@ router.post('/create', async function(req, res, next) {
   let users = req.db.get("Users");
   let templates = req.db.get("Templates");
 
+  //the memeObject that is in the request body
   let doc = req.body;
 
-  console.log(doc);
+  //console.log(doc);
 
   //find creatorId
   let user = await users.findOne({username: req.username});
+  //if not found set as anonymous
   if(user == null){ doc.creator = "anonymous"}
+  //set creator fields
   else{ doc.creator = user._id;};
+  //delete user field
   delete doc.user;
 
 
@@ -259,39 +246,35 @@ router.post('/create', async function(req, res, next) {
     res.status(404).send("Template not found");
     return;
   }
-  console.log("Template await: " + templateObject.url);
+  //console.log("Template await: " + templateObject.url);
   
   
   //create new dbDocument
+  //set metadata
   doc.creationDate = new Date();
   doc.image = "";
-  //to test filtering TODO: change back to 0
+  //to use filtering TODO: change back to 0 and implement upvotes
   doc.rating = Math.floor(Math.random()*50);
   doc.comments = [];
 
-
-
-  //TODO: link meme image/render meme image
-  let dbObject
-
   //insert meme in db and return result
+  let dbObject
   try{
     dbObject = await memes.insert(doc);
   }
   catch(err){
     console.error(err);
-    res.status(500).send("Error while creating entry in Database")
+    res.status(500).json("Error while creating entry in Database");
     return;
   }
 
-
+  //render image, imageFile is then the filename
   let imageFile;
-  //render image
   try{
     imageFile = await renderer.render(templateObject.url, doc.captions, doc._id);
     }
   catch(err){
-    //Error while rendering
+    //Error while rendering, remove db object
     memes.remove({_id: dbObject._id}).catch();
     res.status(500).json({text: "Error while rendering Meme: " + err});
     return;
@@ -310,8 +293,8 @@ router.post('/create', async function(req, res, next) {
 
     dbObject.image = "http://localhost:3001/images/usercontent/" + imageFile;
 
-    //return 
-    console.log(dbObject);
+    //return dbOject
+    //console.log(dbObject);
     res.json(dbObject);
 
   //res.json(doc);

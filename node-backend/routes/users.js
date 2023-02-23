@@ -2,17 +2,20 @@ var express = require('express');
 var jwt = require('jsonwebtoken');
 var router = express.Router();
 
+//login with username and password, responds with jwt token
 router.post('/login', async (req, res, next) => {
+  //get info from request
   const username = req.body.username;
   const password = req.body.password;
 
+  //get Users Collection
   const users = req.db.get("Users");
   //get userid from db
   let user = await users.findOne({username: username});
   if(!user) return res.status(400).json("User not found");
 
   if(password==user.password){
-  //create token
+  //create token and respond
   const token = jwt.sign({user:username}, process.env.SERVERKEY);
   res.json({token: token});
   }
@@ -54,6 +57,7 @@ router.get('/history', async (req, res, next) => {
 //get memes created by query user
 //TODO: error handling
 router.get('/drafts', async (req, res, next) => {
+
   //get username
   let username = req.username;
   if(!username) return res.status(404).json("No user specified");
@@ -65,7 +69,7 @@ router.get('/drafts', async (req, res, next) => {
   //get userid from db
   let user = await users.findOne({username: username});
   if(user){
-  //get memes created by user
+  //get drafts created by user
   let userDrafts = await drafts.find({creator: user._id});
   res.json(userDrafts);
   }

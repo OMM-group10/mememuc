@@ -17,6 +17,7 @@ const db = require('monk')(`127.0.0.1:${MONGODB_PORT}/omm-2223`); // connect to 
 console.log(`Connected to MongoDB at port ${MONGODB_PORT}`)
 // ######
 
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var memesRouter = require('./routes/memes');
@@ -26,7 +27,7 @@ var templatesRouter = require('./routes/templates');
 var app = express();
 app.use(cors());
 
-//Load fonts
+//Load fonts for renderer
 renderer.loadFonts();
 
 // view engine setup
@@ -38,31 +39,35 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-//TODO: add cnv
+//Add db to request
 app.use(function(req,res,next){ 
   req.db = db;
   next();
 });
 
 
-// the login middleware. Requires jwt authentication
+// Login middleware checks for jwt authentication and assigns username anonymous otherwise
 app.use((req,res,next) => {
       //default user
       req.username = 'anonymous';
 
+      //check for authToken process like in (https://www.youtube.com/watch?v=mbsmsi7l3r4)
       const authHeader = req.headers.authorization;
       const token = authHeader && authHeader.split(' ')[1];
       console.log(authHeader);
 
-      //no valid token
+      //no valid token, skip verify
       if(!token) {
         next()
-        console.log("not logged in");
+        //console.log("not logged in");
       }
       else{
-        jwt.verify(token, process.env.SERVERKEY,(err, parsedToken)=>{
+        //verify token with env variable SERVERKEY
+        jwt.verify(token, process.env.SERVERKEY, (err, parsedToken)=>{
           if(err) return res.status(403).json("Authtoken invalid");
-          console.log("Verified token: ", parsedToken);
+          //console.log("Verified token: ", parsedToken);
+
+          //set username from token
           req.username = parsedToken.user;
         })
         next();
