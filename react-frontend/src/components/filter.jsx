@@ -28,7 +28,9 @@ function Filter({filterState, setFilterState, onApply = (()=>{})}){
 
     const submitFilter = (e) =>{
         e.preventDefault();
-        setFilterState(state);
+        let applyState = state;
+        if(state.attr=='none') applyState.use=0;
+        setFilterState(applyState);
         onApply();
     }
 
@@ -72,8 +74,8 @@ function Filter({filterState, setFilterState, onApply = (()=>{})}){
                 Filter:
                 <select name="attr" value={state.attr} onChange={handleFilterChange}>
                   <option value="rating">Rating</option>
-                  <option value="creationDate">Creation Date</option>
-                  <option value="none">None</option>
+{/*                   <option value="creationDate">Creation Date</option>
+ */}                  <option value="none">None</option>
                 </select>
               </label>
 
