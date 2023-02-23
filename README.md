@@ -18,6 +18,7 @@ User credentials to test profile features:
 
 Rendering in the backend uses the Node-Canvas library (https://www.npmjs.com/package/canvas); This should install and run fine via npm without further dependencies, but caused issues on MAC-OS. (running brew install pkg-config cairo pango libpng jpeg giflib librsvg solved the problem there)
 
+##Original Readme
 
 This repository is a _template_ to unify the meme generator bonus project submissions for the _Online Multimedia Lecture_ in the winter semester 2022/23 at LMU Munich.
 
