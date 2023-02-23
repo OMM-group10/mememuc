@@ -12,13 +12,12 @@ function Account(props) {
   const [history, setHistory] = useState([]);
   //created drafts
   const [drafts, setDrafts] = useState([]);
-  //TODO: use authentication
-  const username = "testuser1"
+  
 
   
   useEffect(()=>{
     //fetch meme history
-    serverRequest('http://localhost:3001/users/history' + '?user=' + username, {})
+    serverRequest('http://localhost:3001/users/history', {})
     .then(res=>res.json()).then(memes => {
       console.log(memes);
       setHistory(memes);
@@ -26,7 +25,7 @@ function Account(props) {
     .catch(err=>console.error(err));
 
     //fetch saved drafts
-    serverRequest('http://localhost:3001/users/drafts' + '?user=' + username, {})
+    serverRequest('http://localhost:3001/users/drafts', {})
     .then(res=>res.json()).then(drafts => {
       console.log(drafts);
       setDrafts(drafts);
