@@ -23,18 +23,32 @@ const parseQuery = params => {
   memes/?meme='memeId'
 */
 //TODO: Error handling
-router.get('/', function(req, res, next) {
+router.get('/', async function(req, res, next) {
 
   //get collections from db
   let memes = req.db.get("Memes");
   let users = req.db.get("Users");
-  let comments = req.db.get("Comments");
+  //let comments = req.db.get("Comments");
 
   //cast Object Id
   let memeId = req.db.id(req.query.meme);
 
+  //find meme in DB
+  let meme = await memes.findOne({_id: memeId});
+  if(!meme) return res.sendStatus(404);
+  //If user anonymous return meme
+  if(meme.creator=='anonymous') {
+    meme.creator={username: 'anonymous'};
+    res.json(meme);
+  }
+  //if user registered find userdata and attach it
+  else{
+    let creator = await users.findOne({_id: meme.creator});
+    meme.creator = creator;
+    res.json(meme);
+  }
   //find specified meme in collection
-  memes.findOne({_id: memeId})
+/*   memes.findOne({_id: memeId})
     .then(meme => {
 
       //find creator
@@ -57,8 +71,9 @@ router.get('/', function(req, res, next) {
             })
         })
     })
-    //TODO: add error handling
-    //TODO: Clean up layout
+ */ 
+  //TODO: add error handling
+  //TODO: Clean up layout
 
 
   
@@ -225,7 +240,7 @@ router.post('/create', async function(req, res, next) {
   console.log(doc);
 
   //find creatorId
-  let user = await users.findOne({username: doc.user});
+  let user = await users.findOne({username: req.username});
   if(user == null){ doc.creator = "anonymous"}
   else{ doc.creator = user._id;};
   delete doc.user;
@@ -309,7 +324,7 @@ router.post('/draft', async function(req, res, next){
     console.log(doc);
   
     //find creatorId
-    let user = await users.findOne({username: doc.user});
+    let user = await users.findOne({username: req.username});
     if(user == null){ doc.creator = "anonymous"}
     else{ doc.creator = user._id;};
     delete doc.user;

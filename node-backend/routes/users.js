@@ -1,4 +1,5 @@
 var express = require('express');
+var jwt = require('jsonwebtoken');
 var router = express.Router();
 
 router.post('/login', async (req, res, next) => {
@@ -11,7 +12,9 @@ router.post('/login', async (req, res, next) => {
   if(!user) return res.status(400).json("User not found");
 
   if(password==user.password){
-  res.json({token: "Token1", username: username, password: password});
+  //create token
+  const token = jwt.sign({user:username}, process.env.SERVERKEY);
+  res.json({token: token});
   }
   else{
     res.status(401).json("Wrong user or Password");
@@ -31,7 +34,7 @@ router.get('/', function(req, res, next) {
 //TODO: error handling
 router.get('/history', async (req, res, next) => {
   //get username
-  let username = req.query.user;
+  let username = req.username;
   if(!username) return res.status(404).json("No user specified");
 
   //get collections
@@ -40,17 +43,19 @@ router.get('/history', async (req, res, next) => {
 
   //get userid from db
   let user = await users.findOne({username: username});
+  if(user){
   //get memes created by user
   let history = await memes.find({creator: user._id});
-
   res.json(history);
+  }
+  else res.json([]);
 });
 
 //get memes created by query user
 //TODO: error handling
 router.get('/drafts', async (req, res, next) => {
   //get username
-  let username = req.query.user;
+  let username = req.username;
   if(!username) return res.status(404).json("No user specified");
 
   //get collections
@@ -59,10 +64,15 @@ router.get('/drafts', async (req, res, next) => {
 
   //get userid from db
   let user = await users.findOne({username: username});
+  if(user){
   //get memes created by user
   let userDrafts = await drafts.find({creator: user._id});
-
   res.json(userDrafts);
+  }
+  //user not authenticated
+  else{
+    res.json([]);
+  }
 });
 
 
