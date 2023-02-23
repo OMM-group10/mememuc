@@ -63,7 +63,6 @@ function Login(){
       </label>
       <button type="submit">Log in</button>
     </form>
-    <button onClick={e=>{serverRequest("http://localhost:3001/users/drafts?user=testuser1",{}).then(res=>res.json()).then(res=>console.log(res))}}>Test API Call</button>
   </div>
   );
 };
