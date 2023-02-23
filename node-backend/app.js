@@ -2,9 +2,9 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+var jwt = require('jsonwebtoken');
 var logger = require('morgan');
 var cors = require('cors');
-
 var cnv = require('canvas');
 var renderer = require('./renderer');
 
@@ -45,26 +45,34 @@ app.use(function(req,res,next){
 });
 
 
-// the login middleware. Requires BasicAuth authentication
+// the login middleware. Requires jwt authentication
 app.use((req,res,next) => {
-  const users = db.get('users');
-  users.findOne({basicauthtoken: req.headers.authorization}).then(user => {
-    if (user) {
-      req.username = user.username;  // test test => Basic dGVzdDp0ZXN0
-      next()
-    }
-    else {
-      console.log("not logged in");
-      next();
+      //default user
+      req.username = 'anonymous';
+
+      const authHeader = req.headers.authorization;
+      const token = authHeader && authHeader.split(' ')[1];
+      console.log(authHeader);
+
+      //no valid token
+      if(!token) {
+        next()
+        console.log("not logged in");
+      }
+      else{
+        jwt.verify(token, process.env.SERVERKEY,(err, parsedToken)=>{
+          if(err) return res.status(403).json("Authtoken invalid");
+          console.log("Verified token: ", parsedToken);
+          req.username = parsedToken.user;
+        })
+        next();
+      }
+
+
+      //next();
 
       /* res.set('WWW-Authenticate', 'Basic realm="401"')
       res.status(401).send() */
-    }
-  }).catch(e => {
-    console.error(e)
-    res.set('WWW-Authenticate', 'Basic realm="401"')
-    res.status(401).send()
-  })
 })
 
 
