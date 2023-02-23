@@ -118,20 +118,21 @@ function Editor(props) {
     let ctx = canvas.getContext("2d");
     let background = new Image();
     background.crossOrigin = "Anonymous";
-    
+
     //if defined use it as background
     if(template){ background.src ='http://localhost:3001' + template.url};
-    
-    canvas.width = 700;
-    //ratio by which image was scaled to fit canvas is later used to scale text as well
-    let scale = (canvas.width/background.naturalWidth);
 
-    canvas.height = (scale * background.naturalHeight);
+       
 
     //draw background when loaded
-    background.addEventListener(
-      "load",
+    background.onload =
       () => {
+
+        canvas.width = 700;
+        //ratio by which image was scaled to fit canvas is later used to scale text as well
+        let scale = (canvas.width/background.naturalWidth);
+        canvas.height = (scale * background.naturalHeight);   
+
         //draw image scaled
         ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 
@@ -155,9 +156,9 @@ function Editor(props) {
 
           } 
 
-      },
-      false
-    );
+      }
+    
+
 
   },[props, templateMap])
 
