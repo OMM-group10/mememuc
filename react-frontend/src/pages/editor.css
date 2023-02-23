@@ -3,7 +3,7 @@
 }
 
 .template-list{
-    position: absolute;
+    position: relative;
     left: 0px;
     width: 25vw;
     height:80%;
@@ -11,7 +11,7 @@
 }
 
 .template{
-    display: block;
+    display: inline;
     margin: auto;
 }
 
