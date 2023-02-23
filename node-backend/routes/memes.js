@@ -30,9 +30,15 @@ router.get('/', async function(req, res, next) {
   let users = req.db.get("Users");
   //let comments = req.db.get("Comments");
 
+  let memeId
   //cast Object Id
-  let memeId = req.db.id(req.query.meme);
-
+  try{
+    memeId = req.db.id(req.query.meme);
+  }
+  catch(err){
+    console.error(err);
+    return res.sendStatus(404);
+  }
   //find meme in DB
   let meme = await memes.findOne({_id: memeId});
   if(!meme) return res.sendStatus(404);
