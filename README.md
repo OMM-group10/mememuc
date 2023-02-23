@@ -12,7 +12,7 @@ Features implemented:
 * 12. Profile - Authentification - Intermediate Level
 * 14. Profile - History - Advanced Level
 
-User credentials to test Profile features:
+User credentials to test profile features:
 * username: testuser0 password: test
 * username: testuser1 password: test
 
