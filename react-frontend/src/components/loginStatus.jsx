@@ -4,9 +4,10 @@ import { Link } from "react-router-dom";
 
 
 const LoginStatus = (props) => {
-
+    //true if logged in
     const [loggedIn, setLoggedIn] = useState(false);
 
+    //check local storage for user and token
     useEffect(()=>{
         if(window.localStorage.getItem('authToken') && window.localStorage.getItem('userName')){
             setLoggedIn(true);

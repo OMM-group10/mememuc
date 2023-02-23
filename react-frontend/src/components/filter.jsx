@@ -14,18 +14,21 @@ function Filter({filterState, setFilterState, onApply = (()=>{})}){
     //internal State for filter component
     const [state, setState] = useState(filterState);
 
+    //update state 
     const handleFilterChange = (e) => {
                 setState((prev)=>{
                 console.log("Previous State:", prev);
                 return {...prev, [e.target.name]: e.target.value, use: 1}
                 })
             }
-        
+
+    //reset state to default
     const resetFilter = (e) =>{
         e.preventDefault();
         setState(defaultFilter);
     }
 
+    //update global Filter state
     const submitFilter = (e) =>{
         e.preventDefault();
         let applyState = state;

@@ -6,7 +6,7 @@ import CaptionEditor from "../components/captionEditor";
 import Navbar from "../components/navbar";
 import React, { useEffect, useState, useLayoutEffect } from "react";
 
-
+//state to recall when reset button is pressed
 const defaultState = {
   title:"New Meme",
   template: 'Doge',
@@ -29,8 +29,6 @@ const defaultState = {
 }
 
 
-//TODO: Clear Button
-//TODO: Download Link
 function Editor(props) {
 
   //map of available Templates
@@ -50,31 +48,27 @@ function Editor(props) {
     })
   }
 
-  //handle changes of caption properties
-  const changeHandler = (index,e) => {
-    props.setState(prev=>{
-      prev.captions[index][e.target.name] = e.target.value;
-      //console.log(prev);
-      return({...prev});
-    })
-
-  } 
-
   //create download button
   const createLocally = e => {
+    //get current image data of canvas 
     const imageData = cnv.current.toDataURL('png');
+    //reference to download button
     const link = download.current;
 
+    //set attributes
     link.setAttribute('download', new Date().toLocaleString() + "_meme");
     link.setAttribute('href', imageData);
     link.setAttribute('style', '');
+    //notify user
     alert("Meme was created locally!");
   }
 
   //create Meme on server and render download button
   const createOnServer = e => {
+    //create Meme on server
     createMeme(props.state)
     .then(res=>{
+      //set attributes of download button
       const link = download.current;
       link.setAttribute('download', new Date().toLocaleString() + "_meme");
       link.setAttribute('href', res.image);
@@ -86,8 +80,10 @@ function Editor(props) {
   }
 
   const draftHandler = e => {
+    //check if user is logged in
     if(!window.localStorage.getItem('authToken')) alert("Not Logged in!")
     else{
+      //if logged in create draft
       createMeme(props.state, true)
     }
   }
@@ -116,37 +112,40 @@ function Editor(props) {
   useEffect(() => {
     //get active template
     const template = templateMap.get(props.state.template);
+    //if templates not yet loaded return
     if(!template) {
       console.log("Templates not ready: ", new Date());
       return;
     }
     console.log("Template ready: ", new Date());
-
+    //set up canvas and template Image
     let canvas = cnv.current;
     let ctx = canvas.getContext("2d");
     let background = new Image();
+    //Use crossOrigin so canvas is not tainted
     background.crossOrigin = "Anonymous";
 
-    //if defined use it as background
+    //if defined use template url as image src
     if(template){ background.src ='http://localhost:3001' + template.url};
 
        
-
     //draw background when loaded
     background.onload =
       () => {
 
+        //set canvas width and height
         canvas.width = 700;
         //ratio by which image was scaled to fit canvas is later used to scale text as well
         let scale = (canvas.width/background.naturalWidth);
-        canvas.height = (scale * background.naturalHeight);   
+        canvas.height = (scale * background.naturalHeight);
 
         //draw image scaled
         ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
 
-            //Draw text
+        //Draw text (same process as in the backend)
         for (let cap of props.state.captions){
               
+          //apply scale to fontsize
           ctx.font = scale * cap.fontSize + "px" + " Impact";
           ctx.textAlign = "center";
 

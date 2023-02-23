@@ -25,30 +25,35 @@ return memeObject;
 
 function Meme(props) {
 
-  const navigate = useNavigate();
+//used to go to next page
+const navigate = useNavigate();
 
-  //handle Buttons to display "next" meme
+//handle Buttons to display the "next" meme
 const handleButton = async e => {
-
+  //base route to navigate to
   let route = '/meme/'
 
+  //parameters to send via url query
   const paramObject = {
     paging: {},
     sortBy: props.sortBy,
     filter: props.filterState
   }
 
+  //create Url for API call
   let url = new URL("http://localhost:3001/memes/all");
   url.search = new URLSearchParams({params: JSON.stringify(paramObject)}).toString();
 
   //get filtered list of memes
   let memes = await fetch(url).then(res=>res.json());
   
+  //if no memes match condition notify user
   if (memes.length===0){
     alert("no meme found!");
     return;
   }
 
+  //index of next meme
   let index = 0;
 
   //if random select random meme
@@ -59,10 +64,9 @@ const handleButton = async e => {
   //if not random find meme in memes array
   for (let i in memes){
     if(memes[i]._id == memeId){
+      //current meme is at index i so take next/previous
       if(e.target.name==='next'){ index = (((Number(i)+1)% memes.length + memes.length) %memes.length) }
-      console.log('next:', index);
       if(e.target.name==='previous'){ index = (((Number(i)-1)% memes.length + memes.length) %memes.length) }
-      console.log("Index: ", index);
       break;
     }
 
@@ -71,7 +75,6 @@ const handleButton = async e => {
 
   
   //go to next meme page
-  //window.location.href = route + memes[index]._id;
   navigate(route + memes[index]._id);
 }
   

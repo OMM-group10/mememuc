@@ -4,7 +4,7 @@ import './documentation.css'
 //import './navbar.css';
 
 
-  //calls fetch with the specified url and options, also attaches authorization header if logged in
+  //returns fetch with the specified url and options, also attaches authorization header if logged in
   function serverRequest(url, options){
     if(!options.headers) options.headers = {};
     //check for login token

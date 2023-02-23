@@ -10,13 +10,13 @@ const logout = ()=>{
 
 function Login(){
 
+  //state of inputs
   const[state, setState] = useState({username: "", password: ""});
 
+  //handles Login Button
   const loginHandler = async e => {
     e.preventDefault();
 
-    //let local = window.localStorage.getItem('username', state.username);
-    //console.log("Local: ", local);
 
     //make login request
     let authToken = await fetch('http://localhost:3001/users/login', {
@@ -34,16 +34,19 @@ function Login(){
     })
     .catch(err=>console.log(err));
 
+    //if request successful set local storage items
     if(authToken){
       window.localStorage.setItem('userName', state.username);
       window.localStorage.setItem('authToken', authToken.token);
+      //notify user of successful login
       alert("You were logged in");
     }
 
-    console.log("From Server: ", authToken);
-    console.log(state);
+    //console.log("From Server: ", authToken);
+    //console.log(state);
   }
   
+  //handle input changes
   const handleChange = e => {
     setState(prev=>{
       prev[e.target.name] = e.target.value;
