@@ -1,5 +1,24 @@
 # MemeMuc Launcher
 
+Features implemented:
+2. Editor - Text input - Intermediate Level
+4. Editor - Generation and Download - Intermediate Level
+5. Editor - Navigation - Intermediate Level
+6. API - Meme Creation - Intermediate Level
+7. API - Meme Retrieval - Intermediate Level
+8. View - Overview - Intermediate Level
+9. View - Single view - Intermediate Level
+10. View - Sort and Filter - Intermediate Level
+12. Profile - Authentification - Intermediate Level
+14. Profile - History - Advanced Level
+
+User credentials to test Profile features:
+* username: testuser0 password: test
+* username: testuser1 password: test
+
+Rendering in the backend uses the Node-Canvas library (https://www.npmjs.com/package/canvas); This should install and run fine via npm without further dependencies, but caused issues on MAC-OS. (running brew install pkg-config cairo pango libpng jpeg giflib librsvg solved the problem there)
+
+
 This repository is a _template_ to unify the meme generator bonus project submissions for the _Online Multimedia Lecture_ in the winter semester 2022/23 at LMU Munich.
 
 Any submission must be runnable without additional adaptions by executing
