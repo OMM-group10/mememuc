@@ -3,12 +3,13 @@
 Features implemented:
 * 2. Editor - Text input - Intermediate Level
 * 4. Editor - Generation and Download - Intermediate Level
-* 5. Editor - Navigation - Intermediate Level
+* 5. Editor - Navigation - Advanced Level
 * 6. API - Meme Creation - Intermediate Level
-* 7. API - Meme Retrieval - Intermediate Level
+* 7. API - Meme Retrieval - Advanced Level
 * 8. View - Overview - Intermediate Level
 * 9. View - Single view - Intermediate Level
 * 10. View - Sort and Filter - Intermediate Level
+* 11. View - Sort Integration
 * 12. Profile - Authentification - Intermediate Level
 * 14. Profile - History - Advanced Level
 
