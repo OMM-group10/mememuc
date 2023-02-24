@@ -180,6 +180,9 @@ function Documentation() {
           <button onClick={testCall}>Example Call </button>
           </ul> 
 
+          <button onClick={populateDb}>
+        Click to create 5 random memes
+          </button>
 
 
           <ul className="doc-api">
@@ -190,6 +193,26 @@ function Documentation() {
           <li>response: memeDbObject</li>
           <button onClick={()=>{window.open("http://localhost:3001/memes?meme=123", "_blank")}}>Example Call: meme=123</button>
           </ul> 
+
+          <ul className="doc-api">
+          Retrieve random meme: 
+          <li>url: http://localhost:3001/memes/random</li>
+          <li>url search query: (optional) params=stringified paramsObject </li>
+          <li>method: get</li>
+          <li>response: memeDbObject</li>
+          <button onClick={()=>{window.open("http://localhost:3001/memes/random", "_blank")}}>Example Call</button>
+          </ul> 
+
+          <ul className="doc-api">
+          Retrieve multiple memes: (both use get method )
+          <li>Page-url: http://localhost:3001/memes/page</li>
+          <li>All-Memes-url: http://localhost:3001/memes/all</li>
+          <li>url search query: params=stringified paramsObject (paging property can be ommited for /all)</li>
+          <li>method: get</li>
+          <li>response: [memeDbObject]</li>
+          <button onClick={()=>{window.open("http://localhost:3001/memes/page?params=%7B%22paging%22%3A%7B%22page%22%3A0%2C%22pageSize%22%3A10%7D%2C%22sortBy%22%3A%7B%22attr%22%3A%22creationDate%22%2C%22order%22%3A-1%7D%2C%22filter%22%3A%7B%22use%22%3A0%2C%22attr%22%3A%22none%22%2C%22value%22%3A0%2C%22comparison%22%3A%22%24lt%22%2C%22query%22%3A%7B%7D%7D%7D", "_blank")}}>Example Call: Get 10 memes sorted by creation date</button>
+          </ul> 
+
 
 
           <code>
@@ -220,10 +243,25 @@ function Documentation() {
           color: String &#125;  <br/>
           </code>
 
+          <br/>
+          <code>
+          paramsObject = &#123; <br/>
+          filter: &#123; <br/>
+            use: 1|0, <br/>
+            attr: String, <br/>
+            comparison: String (mongodb comparator), <br/>
+            value: Number &#125; <br/>
+          sortBy: &#123; <br/>
+            attr: String, <br/>
+            order: -1|1 &#125; <br/>
+          paging: &#123; <br/>
+            pagesize: Number, <br/>
+            page: Number &#125; <br/>
+           &#125;  <br/>
+          </code>
 
-          <button onClick={populateDb}>
-        "Click to fill DB with random memes"
-          </button>
+
+
         
       </div>
     );

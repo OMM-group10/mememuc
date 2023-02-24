@@ -45,6 +45,7 @@ class Overview extends React.Component{
     this.setState({items:[], page: 0, hasMore:true})
    }
   
+  //inspired by the example from the React Infinite Scroll module page
   fetchMoreData = () => {
 
     console.log("Loading more Memes");
