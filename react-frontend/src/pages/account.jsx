@@ -60,7 +60,7 @@ function Account(props) {
             let state = {...draft};
             delete state['creator'];
             delete state['_id'];
-            return({...state, user:'testuser1'})
+            return({...state})
           })
           navigate('/editor');
           }}>

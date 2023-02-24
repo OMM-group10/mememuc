@@ -6,12 +6,10 @@ import CaptionEditor from "../components/captionEditor";
 import Navbar from "../components/navbar";
 import React, { useEffect, useState, useLayoutEffect } from "react";
 
-//state to recall when reset button is pressed
+//state to recall when reset button is pressed; it didnt work so it is used as literal in reset button, which is ugly but seems to work
 const defaultState = {
   title:"New Meme",
   template: 'Doge',
-  //TODO: change to actual user/annonymous
-  user: "testuser1",
   captions:[{
     xPosition: 0.5,
     yPosition: 0.2,
@@ -114,10 +112,10 @@ function Editor(props) {
     const template = templateMap.get(props.state.template);
     //if templates not yet loaded return
     if(!template) {
-      console.log("Templates not ready: ", new Date());
+      //console.log("Templates not ready: ", new Date());
       return;
     }
-    console.log("Template ready: ", new Date());
+    //console.log("Template ready: ", new Date());
     //set up canvas and template Image
     let canvas = cnv.current;
     let ctx = canvas.getContext("2d");
@@ -191,14 +189,31 @@ function Editor(props) {
 
           <div>
             Title: <input type="text" name="title" value={props.state.title} onChange={e=>{props.setState(prev=>{return{...prev, title: e.target.value}})}} />
-            <button onClick={e=>{props.setState(defaultState)}}>Reset Editor</button>
+            <button onClick={e=>{props.setState({
+                                                  title:"New Meme",
+                                                  template: 'Doge',
+                                                  captions:[{
+                                                    xPosition: 0.5,
+                                                    yPosition: 0.2,
+                                                    text: "Top Text",
+                                                    fontSize: 100,
+                                                    color: "white"
+                                                  },
+                                                  {
+                                                    xPosition: 0.5,
+                                                    yPosition: 0.8,
+                                                    text: "Bottom Text",
+                                                    fontSize: 100,
+                                                    color: "white"
+                                                  }]
+                                                })}}>Reset Editor</button>
 
-            <form>
+            <div>
               Top Caption:
               <CaptionEditor {...props} index={0}></CaptionEditor>
               Bottom Caption: 
               <CaptionEditor {...props} index={1}></CaptionEditor>
-            </form>
+            </div>
           </div>
 
           <canvas className="meme-canvas" ref={cnv}></canvas>
