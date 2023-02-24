@@ -77,6 +77,8 @@ router.get('/random', (req, res, next) => {
   //find memes in db
   memes.find(dbQuery,{})
   .then(memes => {
+    
+    if(memes.length==0) return res.status(404).json("No meme found")
     //select random meme
     const index = Math.floor(Math.random() * memes.length);
     res.json(memes[index]);
